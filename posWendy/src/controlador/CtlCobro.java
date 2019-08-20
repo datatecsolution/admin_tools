@@ -386,7 +386,7 @@ switch(e.getKeyCode()){
 	private void registraPagoAfactura() {
 		// TODO Auto-generated method stub
 		
-		//se procesan las facturas y sus saldos para poderlos actualizar
+				//se procesan las facturas y sus saldos para poderlos actualizar
 				List<CuentaFactura> facturas=view.getModeloFacturas().getCuentasFacturas();
 				
 				for(int y=0;y<facturas.size();y++){

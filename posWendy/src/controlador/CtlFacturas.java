@@ -17,11 +17,15 @@ import javax.swing.event.ChangeListener;
 import modelo.AbstractJasperReports;
 import modelo.Caja;
 import modelo.ConexionStatic;
+import modelo.CuentaFactura;
+import modelo.CuentaXCobrarFactura;
 import modelo.DetalleFactura;
 import modelo.Factura;
 import modelo.NumberToLetterConverter;
 import modelo.ReciboPago;
 import modelo.dao.CajaDao;
+import modelo.dao.CuentaFacturaDao;
+import modelo.dao.CuentaXCobrarFacturaDao;
 import modelo.dao.DetalleFacturaDao;
 import modelo.dao.DevolucionesDao;
 import modelo.dao.FacturaDao;
@@ -295,10 +299,30 @@ public class CtlFacturas implements ActionListener, MouseListener, ChangeListene
 											
 											
 							
-											
+											//si tiene detalles la factura se realizan operaciones con los detalles
 											if(!myFactura.getDetalles().isEmpty() && myFactura.getDetalles()!=null)
 											{
-												//si la factura que se anulo es al credito se hace un pago a farvor del cliente para rebajar el saldo
+												//se busca la cuenta de la factura
+												CuentaFactura cuentaFactura=new CuentaFactura();
+												CuentaFacturaDao cuentaFacturaDao=new CuentaFacturaDao();
+												CuentaXCobrarFacturaDao cuentaXCobrarFacturaDao=new CuentaXCobrarFacturaDao();
+												
+												//se busca la factura en la base de datos
+												cuentaFactura=cuentaFacturaDao.buscarPorId(myFactura.getCliente().getId(),caja.getCodigo(),myFactura.getIdFactura());
+												
+												if(cuentaFactura!=null){
+													CuentaXCobrarFactura cuenta=new CuentaXCobrarFactura();
+													
+													cuenta.setCodigoCuenta(cuentaFactura.getCodigoCuenta());
+													cuenta.setDebito(new BigDecimal(cuentaFactura.getSaldo().doubleValue()).setScale(2, BigDecimal.ROUND_HALF_EVEN));
+													cuenta.setSaldo(new BigDecimal(0));
+													cuenta.setDescripcion("Anulacion de factura ");
+													
+													cuentaXCobrarFacturaDao.reguistrarDebito(cuenta);
+												}
+												
+												
+												//si la factura que se anulo es al credito se hace un pago a farvor del cliente para rebajar el saldo y lo mismo con la factura
 												if(myFactura.getTipoFactura()==2){
 													
 													ReciboPago myRecibo=new ReciboPago();
@@ -342,11 +366,13 @@ public class CtlFacturas implements ActionListener, MouseListener, ChangeListene
 													}else{//
 														JOptionPane.showMessageDialog(view, "El recibo no se guardo correctamente.");
 													}//fin del if que verefica la acccion de guardar el recibo
+													
+													
 												
 												}
 												
 												
-												
+												//bandera para verificar si se realizo una devolucion
 												boolean resultado=false;
 												
 												

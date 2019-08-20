@@ -2595,7 +2595,7 @@ public void guardarRemotoCredito(){
 						AbstractJasperReports.createReport(ConexionStatic.getPoolConexion().getConnection(),6, myFactura.getIdFactura());
 						//AbstractJasperReports.showViewer(view);
 						AbstractJasperReports.imprimierFactura();
-						AbstractJasperReports.imprimierFactura();
+						//AbstractJasperReports.imprimierFactura();
 					}else
 						if(ConexionStatic.getUsuarioLogin().getConfig().getFormatoFactura().equals("carta")){
 							AbstractJasperReports.createReportFacturaCarta(ConexionStatic.getPoolConexion().getConnection(), myFactura.getIdFactura());

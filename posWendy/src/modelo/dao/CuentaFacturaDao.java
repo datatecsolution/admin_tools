@@ -270,6 +270,76 @@ public class CuentaFacturaDao extends ModeloDaoBasic {
 			}
 			else return null;
 	}
+	
+	public CuentaFactura buscarPorId(int codigoCliente, int codigoCaja, int nofactura) {
+		// TODO Auto-generated method stub
+		CuentaFactura unaCuenta=new CuentaFactura();
+		
+		ResultSet res=null;
+		
+		Connection conn=null;
+		
+		boolean existe=false;
+		
+		try {
+			
+			
+			conn=ConexionStatic.getPoolConexion().getConnection();
+			super.psConsultas = conn.prepareStatement(super.getQuerySelect()+" where cuentas_facturas.codigo_cliente=? and cuenta2.saldo<>0 order by cuentas_facturas.codigo_cuenta asc");
+			super.psConsultas.setInt(1, codigoCliente);
+			
+			System.out.println(psConsultas);
+			res = super.psConsultas.executeQuery();
+			
+			while(res.next()){
+				
+				
+				unaCuenta.setCodigoCuenta(res.getInt("codigo_cuenta"));
+				unaCuenta.setCodigoCaja(res.getInt("codigo_caja"));
+				unaCuenta.setNoFactura(res.getInt("no_factura"));
+				unaCuenta.setFecha(res.getString("fecha"));
+				unaCuenta.setSaldo(res.getBigDecimal("saldo"));
+				
+				
+				Cliente cliente=new Cliente();
+				
+				cliente.setId(res.getInt("codigo_cliente"));
+				cliente.setNombre(res.getString("nombre_cliente"));
+				cliente.setRtn(res.getString("rtn"));
+				
+				unaCuenta.setCliente(cliente);
+				
+	
+				existe=true;
+			 }
+			//res.close();
+			//conexion.desconectar();
+					
+					
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(),"Error en la base de datos",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		finally
+		{
+			try{
+				if(res != null) res.close();
+	            if(super.psConsultas != null)super.psConsultas.close();
+	            if(conn != null) conn.close();
+				
+				} // fin de try
+				catch ( SQLException excepcionSql )
+				{
+					excepcionSql.printStackTrace();
+					//conexion.desconectar();
+				} // fin de catch
+		} // fin de finally
+		
+			if (existe) {
+				return unaCuenta;
+			}
+			else return null;
+	}
 
 		
 
