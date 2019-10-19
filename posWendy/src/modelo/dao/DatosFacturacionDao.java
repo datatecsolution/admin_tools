@@ -70,7 +70,8 @@ public class DatosFacturacionDao extends ModeloDaoBasic {
 	public int getIdCaiAct(Caja caja){
 		
 		//se cambia la base de datos para las facturas de la caja seleccionada
-		super.DbName=modelo.ConexionStatic.getUsuarioLogin().getCajaActiva().getNombreBd();
+		super.DbName=ConexionStatic.getUsuarioLogin().getCajaActiva().getNombreBd();
+		
 		
 		Integer codCai=0;
 		ResultSet res=null;
@@ -80,6 +81,7 @@ public class DatosFacturacionDao extends ModeloDaoBasic {
 		
 		try {
 			conn=ConexionStatic.getPoolConexion().getConnection();
+			//JOptionPane.showMessageDialog(null, "Pasamossssssss","ERORR",JOptionPane.ERROR_MESSAGE);
 			buscarArt=conn.prepareStatement(super.getQuerySelect()+" ORDER BY codigo_rango desc limit 1");
 			
 			res = buscarArt.executeQuery();

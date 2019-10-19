@@ -305,6 +305,8 @@ public class ConfigUserFactDao extends ModeloDaoBasic {
 					config.setImprReportEntrada(res.getBoolean("impr_report_entrada"));
 					config.setShowReportEntrada(res.getBoolean("show_report_entrada"));
 					config.setActivarBusquedaFacturacion(res.getBoolean("activar_busqueda_facturacion"));
+					config.setAgregarClienteCredito(res.getBoolean("agregar_cliente_credito"));
+					config.setFormatoFacturaCredito(res.getString("formato_factura_credito"));
 					
 					
 					

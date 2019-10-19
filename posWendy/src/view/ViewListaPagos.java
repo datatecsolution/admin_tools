@@ -33,7 +33,7 @@ import view.botones.BotonReporte;
 import view.rendes.PanelPadre;
 import view.rendes.RenderizadorTablaFacturas;
 import view.tablemodel.TablaModeloFacturados;
-import view.tablemodel.TablaModeloFacturas;
+import view.tablemodel.TmFacturas;
 import view.tablemodel.TmPagos;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

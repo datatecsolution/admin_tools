@@ -21,6 +21,10 @@ import javax.swing.JLabel;
 import controlador.CtlMenuPrincipal;
 
 public class ViewMenuPrincipal extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final JLabel usuario = new JLabel("Usuario:");
 	private JMenuItem mntmProveedores;
 	private JMenuItem mntmArticulos;
@@ -60,6 +64,8 @@ public class ViewMenuPrincipal extends JFrame {
 	private JMenu mnBancos;
 	private JMenuItem mntmDepositoretiros;
 	private JMenuItem mntmConfiguracionUsuarios;
+	private JMenuItem mntmAplicarInteresA;
+	private JMenuItem mntmFacturasVencidas;
 	
 	public ViewMenuPrincipal() {
 		setTitle("Admin Tools");
@@ -79,6 +85,9 @@ public class ViewMenuPrincipal extends JFrame {
 		
 		mntmEmpleados = new JMenuItem("Empleados");
 		mnArchivo.add(mntmEmpleados);
+		
+		mntmAplicarInteresA = new JMenuItem("Interes a facturas venc");
+		mnArchivo.add(mntmAplicarInteresA);
 		
 		mntmSalir = new JMenuItem("Salir");
 		mnArchivo.add(mntmSalir);
@@ -137,6 +146,9 @@ public class ViewMenuPrincipal extends JFrame {
 		
 		mntmListaPagos = new JMenuItem("Ver pagos");
 		mnCuentasPorCobrar.add(mntmListaPagos);
+		
+		mntmFacturasVencidas = new JMenuItem("Facturas Vencidas");
+		mnCuentasPorCobrar.add(mntmFacturasVencidas);
 		
 		
 		mnReportes = new JMenu("Reportes");
@@ -211,6 +223,12 @@ public class ViewMenuPrincipal extends JFrame {
 	}
 	
 	public void conectarControlador(CtlMenuPrincipal c){
+		
+		mntmFacturasVencidas.addActionListener(c);
+		mntmFacturasVencidas.setActionCommand("FACT_VENCIDAS");
+		
+		mntmAplicarInteresA.addActionListener(c);
+		mntmAplicarInteresA.setActionCommand("APLICAR_INTERES_FACT");
 		
 		mntmConfiguracionUsuarios.addActionListener(c);
 		mntmConfiguracionUsuarios.setActionCommand("CONFIG_USUARIOS");
@@ -307,6 +325,11 @@ public class ViewMenuPrincipal extends JFrame {
 	}
 	
 	private class panelFondo extends JPanel{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		   public void paintComponent(Graphics g){
 		      Dimension tamanio = getSize();

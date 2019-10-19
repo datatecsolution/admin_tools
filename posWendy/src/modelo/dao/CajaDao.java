@@ -334,6 +334,7 @@ public class CajaDao extends ModeloDaoBasic {
 				+ "`cod_rango` int(2) NOT NULL DEFAULT '1',"
 				+ "`cobro_tarjeta` float(11,2) NOT NULL DEFAULT '0.00',"
 				+ "`cobro_efectivo` float(11,2) NOT NULL DEFAULT '0.00',"
+				+ "`fecha_vencimiento` date NOT NULL DEFAULT '1990-01-01',"
 				+ "PRIMARY KEY (`numero_factura`),"
 				+ "UNIQUE KEY `numero_factura` (`numero_factura`) USING BTREE,"
 				+ " KEY `codigo_cliente` (`codigo_cliente`) USING BTREE,"
@@ -430,19 +431,36 @@ public class CajaDao extends ModeloDaoBasic {
 		String sql=" CREATE TRIGGER "+caja.getNombreBd()+".detalle_factura_b_insert BEFORE INSERT ON "+caja.getNombreBd()+".detalle_factura FOR EACH ROW"
 				+ " BEGIN "
 				+ " declare cod_kardex int; "
-				+ " set cod_kardex =(SELECT codigo_kardex FROM admin_tools.articulo_kardex WHERE (codigo_articulo = NEW.codigo_articulo AND	codigo_bodega = "+caja.getCodigoBodega()+") limit 1);"
+				+ " declare tipo_articulo int; "
+				
+				+ " set cod_kardex =(SELECT codigo_kardex FROM admin_tools.articulo_kardex WHERE (codigo_articulo = NEW.codigo_articulo AND	codigo_bodega = "+caja.getCodigoBodega()+") limit 1); "
+				
+				+ "set tipo_articulo=(SELECT t1.tipo_articulo from admin_tools.articulo t1 where t1.codigo_articulo=NEW.codigo_articulo LIMIT 1);"
 
-				+ " if(cod_kardex is null) then "
+				+ " if(cod_kardex is null) then  "
+						
+						+ " if( tipo_articulo =1) then"
 
-						+ " INSERT INTO admin_tools.articulo_kardex(codigo_articulo,codigo_bodega) VALUES (NEW.codigo_articulo,"+caja.getCodigoBodega()+");"
-					
-						+ " set cod_kardex=(select last_insert_id());"
-						+ " CALL admin_tools.crear_ajuste_inventario_kardex(cod_kardex,NEW.cantidad,NEW.precio,\'facturado en "+caja.getNombreBd()+"\');"
-						+ " call admin_tools.crear_venta_kardex(cod_kardex,NEW.numero_factura,NEW.cantidad);"
-						+ " set NEW.agrega_kardex=1;"
+								+ " INSERT INTO admin_tools.articulo_kardex(codigo_articulo,codigo_bodega) VALUES (NEW.codigo_articulo,"+caja.getCodigoBodega()+");"
+							
+								+ " set cod_kardex=(select last_insert_id());"
+								+ " CALL admin_tools.crear_ajuste_inventario_kardex(cod_kardex,NEW.cantidad,NEW.precio,\'facturado en "+caja.getNombreBd()+"\');"
+								+ " call admin_tools.crear_venta_kardex(cod_kardex,NEW.numero_factura,NEW.cantidad);"
+								+ " set NEW.agrega_kardex=1; "
+						+ " end if; "
+						+ " if( tipo_articulo =2) then "
+								+ " CALL admin_tools.crear_venta_insumo_kardex("+caja.getCodigoBodega()+",NEW.codigo_articulo,NEW.cantidad,\'facturado en "+caja.getNombreBd()+"\',NEW.numero_factura); "
+								+ " set NEW.agrega_kardex=1; "
+						+ " end if;"
 				+ " ELSE "
-						+ " call admin_tools.crear_venta_kardex(cod_kardex,NEW.numero_factura,NEW.cantidad);"
-						+ " set NEW.agrega_kardex=1;"
+						+ " if( tipo_articulo =1) then"
+								+ " call admin_tools.crear_venta_kardex(cod_kardex,NEW.numero_factura,NEW.cantidad);"
+								+ " set NEW.agrega_kardex=1; "
+						+ " end if; "
+						+ " if( tipo_articulo =2) then "
+								+ " CALL admin_tools.crear_venta_insumo_kardex("+caja.getCodigoBodega()+",NEW.codigo_articulo,NEW.cantidad,\'facturado en "+caja.getNombreBd()+"\',NEW.numero_factura); "
+								+ " set NEW.agrega_kardex=1; "
+						+ " end if; "
 				+ " end if; "
 				+ " end;";
 		

@@ -33,7 +33,7 @@ import view.botones.BotonEliminar;
 import view.botones.BotonImprimirSmall;
 import view.rendes.PanelPadre;
 import view.rendes.RenderizadorTablaFacturas;
-import view.tablemodel.TablaModeloFacturas;
+import view.tablemodel.TmFacturas;
 import controlador.CtlArticuloLista;
 import controlador.CtlCotizacionLista;
 import java.awt.event.ActionListener;
@@ -53,7 +53,7 @@ public class ViewListaCotizacion extends ViewTabla {
 	
 	
 	
-	private TablaModeloFacturas modelo;
+	private TmFacturas modelo;
 	
 	public ViewListaCotizacion(Window view){
 		
@@ -82,7 +82,7 @@ public class ViewListaCotizacion extends ViewTabla {
 				
 	
         //tabla y sus componentes
-		modelo=new TablaModeloFacturas();
+		modelo=new TmFacturas();
 		
 		
 		tabla.setModel(modelo);
@@ -139,7 +139,7 @@ public void conectarControlador(CtlCotizacionLista c){
 	}
 	
 	
-	public TablaModeloFacturas getModelo(){
+	public TmFacturas getModelo(){
 		return modelo;
 	}
 	

@@ -935,6 +935,7 @@ public class ArticuloDao extends ModeloDaoBasic implements Runnable {
 			rs=psConsultas.getGeneratedKeys(); //obtengo las ultimas llaves generadas
 			while(rs.next()){
 				this.setIdArticuloRegistrado(rs.getInt(1));
+				myArticulo.setId(this.getIdArticuloRegistrado());
 			}
 			
 			//se completa el listado de barras de codigos con el codigo del articulo creado

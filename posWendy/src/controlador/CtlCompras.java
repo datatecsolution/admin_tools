@@ -23,6 +23,7 @@ import modelo.Articulo;
 import modelo.dao.ArticuloDao;
 import modelo.dao.DepartamentoDao;
 import modelo.dao.ImpuestoDao;
+import modelo.dao.PrecioArticuloDao;
 import modelo.AbstractJasperReports;
 import modelo.Conexion;
 import modelo.ConexionStatic;
@@ -37,6 +38,7 @@ import modelo.dao.ProveedorDao;
 import view.ViewAgregarCompras;
 import view.ViewListaArticulo;
 import view.ViewListaProveedor;
+import view.tablemodel.DmtFacturaProveedores;
 import view.tablemodel.TmCategorias;
 
 
@@ -49,6 +51,7 @@ public class CtlCompras implements ActionListener,MouseListener,TableModelListen
 	private FacturaCompra myFactura;
 	private FacturaCompraDao myFacturaDao;
 	private DepartamentoDao deptDao=null;
+	private PrecioArticuloDao preciosDao=null;
 	
 	 
 	public CtlCompras(ViewAgregarCompras v){
@@ -56,7 +59,7 @@ public class CtlCompras implements ActionListener,MouseListener,TableModelListen
 		
 		this.view=v;
 		this.view.conectarControlador(this);
-		
+		preciosDao=new PrecioArticuloDao();
 		myFactura=new FacturaCompra();
 		//se crea las clases para consultar a la BD
 		this.myArticuloDao=new ArticuloDao();
@@ -322,7 +325,12 @@ public class CtlCompras implements ActionListener,MouseListener,TableModelListen
 					
 			        
 					if(myArticulo!=null){
+						
+						//conseguir los precios del producto
+						myArticulo.setPreciosVenta(this.preciosDao.getPreciosArticulo(myArticulo.getId()));
+						
 						this.view.getModelo().setArticulo(myArticulo, row);
+
 						//this.view.getModelo().getDetalle(row).setCantidad(1);
 						boolean toggle = false;
 						boolean extend = false;
@@ -794,9 +802,15 @@ public class CtlCompras implements ActionListener,MouseListener,TableModelListen
 		//JOptionPane.showMessageDialog(view, myArticulo1);
 		//se comprueba si le regreso un articulo valido
 		if(resul){
+			
+			
+			
 			Articulo myArticulo1=ctlArticulo.getArticulo();
 			this.view.getModelo().setArticulo(myArticulo1);
 			//this.view.getModelo().getDetalle(row).setCantidad(1);
+			
+			//conseguir los precios del producto
+			myArticulo1.setPreciosVenta(this.preciosDao.getPreciosArticulo(myArticulo1.getId()));
 			
 			//calcularTotal(this.view.getModeloTabla().getDetalle(row));
 			calcularTotales();
@@ -818,8 +832,9 @@ public class CtlCompras implements ActionListener,MouseListener,TableModelListen
 		this.view.getTablaArticulos().scrollRectToVisible(rect);
 		this.view.getTablaArticulos().clearSelection();
 		this.view.getTablaArticulos().setRowSelectionInterval(row, row);
-		TmCategorias modelo = (TmCategorias)this.view.getTablaArticulos().getModel();
-		modelo.fireTableDataChanged();
+		view.getModelo().fireTableDataChanged();
+		//DmtFacturaProveedores modelo = (DmtFacturaProveedores)this.view.getTablaArticulos().getModel();
+		//modelo.fireTableDataChanged();
 	}
 
 	

@@ -10,13 +10,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-
-
-
-
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 import modelo.Articulo;
 import modelo.dao.ArticuloDao;
@@ -25,14 +24,16 @@ import modelo.Cliente;
 import modelo.CodBarra;
 import modelo.Conexion;
 import modelo.Impuesto;
+import modelo.Insumo;
 import modelo.PrecioArticulo;
 import modelo.dao.ImpuestoDao;
+import modelo.dao.InsumoDao;
 import modelo.Categoria;
 import view.ViewCrearArticulo;
 import view.ViewListaArticulo;
 import view.ViewListaCategorias;
 
-public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListener,  WindowListener {
+public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListener,  WindowListener, TableModelListener {
 	
 	
 	public ViewCrearArticulo view;
@@ -40,6 +41,7 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 	private Articulo myArticulo=new Articulo();
 	private boolean resultaOperacion=false;
 	private ImpuestoDao myImpuestoDao;
+	private InsumoDao insumoDao;
 	private PrecioArticuloDao precioDao=null;
 
 	
@@ -50,9 +52,12 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 		this.view=view;
 		this.myArticuloDao=a;
 		precioDao= new PrecioArticuloDao();
+		insumoDao=new InsumoDao();
 		
 		cargarTabla(precioDao.getTipoPrecios());
 		cargarComboBox();
+		view.getBtnAgregarInsumo().setEnabled(false);
+		view.gettInsumos().setEnabled(false);
 	}
 	
 	
@@ -60,9 +65,10 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 	public void cargarTabla(List<PrecioArticulo> precios){
 		//JOptionPane.showMessageDialog(view, articulos);
 		this.view.getModeloPrecio().limpiar();
-		for(int c=0;c<precios.size();c++){
-			this.view.getModeloPrecio().agregarPrecio(precios.get(c));
-		}
+		if(precios!=null)
+			for(int c=0;c<precios.size();c++){
+				this.view.getModeloPrecio().agregarPrecio(precios.get(c));
+			}
 	}
 
 	@Override
@@ -72,6 +78,56 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 		String comando=e.getActionCommand();
 		
 		switch (comando){
+		
+		case "ELIMINAR_INSUMO":
+			int filaPulsada = this.view.gettInsumos().getSelectedRow();
+		        
+	        //si seleccion una fila
+	        if(filaPulsada>=0){
+	        	view.getModeloInsumos().eliminarInsumo(filaPulsada);
+	        	calcularTotalInsumo();
+	        	
+	        }
+			break;
+		
+		case "AGREGAR_INSUMO":
+			//se llama el metodo que mostrar la ventana para buscar el articulo
+			ViewListaArticulo viewListaArticulo=new ViewListaArticulo(null);
+			CtlArticuloBuscar ctlArticulo=new CtlArticuloBuscar(viewListaArticulo);
+			
+			viewListaArticulo.pack();
+			ctlArticulo.view.getTxtBuscar().setText("");
+			ctlArticulo.view.getTxtBuscar().selectAll();
+			viewListaArticulo.conectarControladorBuscar(ctlArticulo);
+			
+			boolean resuls=ctlArticulo.buscarArticulo(null);
+			
+			if(resuls){
+				Articulo articuloBuscado=ctlArticulo.getArticulo();
+				Insumo isum=new Insumo();
+				isum.setArticulo(articuloBuscado);
+				
+				view.getModeloInsumos().agregarInsumo(isum);
+				calcularTotalInsumo();
+				
+			}
+			break;
+		
+		case "CAMBIOCOMBOBOX":
+			
+			int x=this.view.getCbxTipo().getSelectedIndex();
+			if(x==0){//seleciono un bien
+				view.getBtnAgregarInsumo().setEnabled(false);
+				view.getTpInsumos().setEnabledAt(1,false);
+				view.gettInsumos().setEnabled(false);
+				view.getModeloInsumos().limpiarInsumo();
+			}else{//selecciono un servicio
+				view.getBtnAgregarInsumo().setEnabled(true);
+				view.getTpInsumos().setEnabledAt(1,true);
+				view.gettInsumos().setEnabled(true);
+			}
+				
+			break;
 		
 		case "BUSCAR":
 				ViewListaCategorias viewListaM=new ViewListaCategorias(view);
@@ -139,6 +195,26 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 			cargarDatosArticuloView();
 				//se actulizar el articulo en la base de datos
 				if(myArticuloDao.actualizarArticulo(myArticulo,this.view.getModeloCodBarra().getCodsElimnar())){
+					
+					//se registraran los insumos de los servicios que los tengan agregardos
+					if(myArticulo.getTipoArticulo()==2 && view.getModeloInsumos().getInsumos()!=null && view.getModeloInsumos().getInsumos().size()>0){
+						
+						//eliminar los insumos anteriores y agregar hoy
+						insumoDao.eliminarTodosArticulo(myArticulo.getId());
+						
+						//se recorre la tabla de insumos para guardarlos en la base de datos
+						for(int y=0;y<view.getModeloInsumos().getInsumos().size();y++){
+							Insumo uno=view.getModeloInsumos().getInsumos().get(y);
+							uno.setServicio(myArticulo);
+							
+							if(uno.getCantidad().floatValue()>0){
+								uno.setCodigoServicio(myArticulo.getId());
+								insumoDao.registrar(uno);
+							}
+							
+						}
+					}
+					
 					JOptionPane.showMessageDialog(view, "Se Actualizo el articulo");
 					resultaOperacion=true;
 					this.view.dispose();
@@ -154,6 +230,31 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 		
 	}
 	
+	private void calcularTotalInsumo() {
+		// TODO Auto-generated method stub
+		BigDecimal totalInsumos=new BigDecimal(0);
+		
+		//se verifica que la lista de insumos no sea nula
+		if(view.getModeloInsumos().getInsumos().size()>=0){
+			for(int x=0;x<view.getModeloInsumos().getInsumos().size();x++){
+				BigDecimal cantidad=view.getModeloInsumos().getInsumos().get(x).getCantidad();
+				//BigDecimal precioVenta= new BigDecimal(detalle.getArticulo().getPrecioVenta());
+				
+				
+				
+				BigDecimal precio =new BigDecimal(view.getModeloInsumos().getInsumos().get(x).getArticulo().getPrecioVenta());
+				//se calcula el total del item
+				BigDecimal totalItem=cantidad.multiply(precio);
+				view.getModeloInsumos().getInsumos().get(x).setTotal(totalItem.setScale(2, BigDecimal.ROUND_HALF_EVEN));
+				view.getModeloInsumos().fireTableDataChanged();
+				totalInsumos=totalInsumos.add(totalItem);
+			}
+			view.getTxtInsumoTotal().setText("Lps "+totalInsumos.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());
+		}
+	}
+
+
+
 	/*<<<<<<<<<<<<<<<<<<<<<<<<< metodo que devuelve el articulo guardado >>>>>>>>>>>>>>>>>>>>>>>>>         */
 	public Articulo getArticuloGuardado(){
 		return myArticulo;
@@ -194,6 +295,22 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 			//se ejecuta la accion de guardar
 			if(myArticuloDao.registrar(myArticulo)){
 				
+				
+				//se registraran los insumos de los servicios que los tengan agregardos
+				if(myArticulo.getTipoArticulo()==2 && view.getModeloInsumos().getInsumos()!=null && view.getModeloInsumos().getInsumos().size()>0){
+					
+					//se recorre la tabla de insumos para guardarlos en la base de datos
+					for(int y=0;y<view.getModeloInsumos().getInsumos().size();y++){
+						Insumo uno=view.getModeloInsumos().getInsumos().get(y);
+						uno.setServicio(myArticulo);
+						
+						if(uno.getCantidad().floatValue()>0){
+							uno.setCodigoServicio(myArticulo.getId());
+							this.insumoDao.registrar(uno);
+						}
+						
+					}
+				}
 				JOptionPane.showMessageDialog(this.view, "Se ha registrado Exitosamente","Informacion",JOptionPane.INFORMATION_MESSAGE);
 				myArticulo.setId(myArticuloDao.getIdArticuloRegistrado());//se completa el proveedor guardado con el ID asignado por la BD
 				resultaOperacion=true;
@@ -209,7 +326,7 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 			}
 		}//fin verificacion de codigos de barras
 		else{
-			JOptionPane.showMessageDialog(view, "No se guardo el articulo, ","Error al guardar articulo", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(view, "No se guardo el articulo.\nPorque algunos codigos de barras ya estan utilizados por otros articulos., ","Error al guardar articulo", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -279,15 +396,24 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 		//se estable el tipo de articulo
 		if(a.getTipoArticulo()==1){
 			this.view.getCbxTipo().setSelectedIndex(0);
+			view.getBtnAgregarInsumo().setEnabled(false);
+			view.getBtnEliminarInsumo().setEnabled(false);
+			view.gettInsumos().setEnabled(false);
 		}
 		if(a.getTipoArticulo()==2){
 			this.view.getCbxTipo().setSelectedIndex(1);
+			cargarTablaInsumo(insumoDao.buscarPorId(a.getId()));
+			this.calcularTotalInsumo();
+			view.getBtnAgregarInsumo().setEnabled(true);
+			view.getBtnEliminarInsumo().setEnabled(true);
+			view.gettInsumos().setEnabled(true);
+			
 		}
 		//se cargar los precios de los articulos si los hay
 		//this.cargarTabla(this.precioDao.getPreciosArticulo(myArticulo.getId()));
 		List<PrecioArticulo> preciosArticulo=precioDao.getPreciosArticulo(myArticulo.getId());
 		
-		
+		//se buscar
 		List<PrecioArticulo> precios=precioDao.getTipoPrecios();
 		
 		//se estable el valor de los tipos de precios que se encontraron en la base de datos
@@ -307,7 +433,7 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 			this.cargarTabla(precios);
 		}
 		
-		
+		//view.getModeloInsumos().setInsumos(this.insumoDao.buscarPorId(a.getId()));
 				
 		// se hace visible la ventana modal
 		this.view.setVisible(true);
@@ -317,6 +443,19 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 		return this.resultaOperacion;
 	}
 	
+	private void cargarTablaInsumo(List<Insumo> insumos) {
+		// TODO Auto-generated method stub
+		
+		if(insumos!=null){
+			for(int x=0;x<insumos.size();x++){
+				view.getModeloInsumos().agregarInsumo(insumos.get(x));
+			}
+		}
+		
+	}
+
+
+
 	public Articulo getArticulo(){
 		return myArticulo;
 	}
@@ -425,6 +564,28 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 	public void windowDeactivated(WindowEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+
+	@Override
+	public void tableChanged(TableModelEvent e) {
+		// TODO Auto-generated method stub
+		int colum=e.getColumn();
+		int row=e.getFirstRow();
+		
+		switch(e.getType()){
+		
+		case TableModelEvent.UPDATE:
+			//Se recoge el id de la fila marcada
+	        int identificador=0; 
+	        
+	        if(colum==2){
+	        	this.calcularTotalInsumo();
+	        }
+	        
+			break;
+		}
 	}
 	
 }

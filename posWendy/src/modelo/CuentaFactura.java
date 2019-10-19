@@ -1,10 +1,12 @@
 package modelo;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 public class CuentaFactura {
 	private int codigoCuenta=0;
-	
+	//private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 	private int noFactura=-1;
 	private Factura factura;
 	
@@ -14,11 +16,15 @@ public class CuentaFactura {
 	private int codigoCaja=-1;
 	private Caja caja=null;
 	
-	private String fecha;
+	private Date fecha;
+	private Date fechaVenc;
+	//private String fechaVenc;
 	private BigDecimal saldo=new BigDecimal(0.0);
 	
 	private BigDecimal pago=new BigDecimal(0.0);
 	private BigDecimal newSaldo=new BigDecimal(0.0);
+	
+	private CuentaXCobrarFactura ultimoPago;
 
 	public int getCodigoCuenta() {
 		
@@ -82,11 +88,11 @@ public class CuentaFactura {
 		this.caja = c;
 	}
 
-	public String getFecha() {
+	public Date getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(String fecha) {
+	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
 
@@ -112,6 +118,28 @@ public class CuentaFactura {
 
 	public void setNewSaldo(BigDecimal newSaldo) {
 		this.newSaldo = newSaldo;
+	}
+
+	public Date getFechaVenc() {
+		return fechaVenc;
+	}
+
+	public void setFechaVenc(Date fechaVenc) {
+		this.fechaVenc = fechaVenc;
+	}
+
+	/**
+	 * @return the ultimoPago
+	 */
+	public CuentaXCobrarFactura getUltimoPago() {
+		return ultimoPago;
+	}
+
+	/**
+	 * @param ultimoPago the ultimoPago to set
+	 */
+	public void setUltimoPago(CuentaXCobrarFactura ultimoPago) {
+		this.ultimoPago = ultimoPago;
 	}
 	
 

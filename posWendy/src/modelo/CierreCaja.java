@@ -44,6 +44,7 @@ public class CierreCaja {
 	private boolean estado=false;
 	
 	private String usuario="";
+	private String turno="NA";
 	private List<CierreFacturacion> cierreFacturas=new ArrayList<CierreFacturacion>();
 	
 	public void setEfectivoCaja(BigDecimal t){
@@ -308,6 +309,14 @@ public class CierreCaja {
 	}
 	public void setTotalEntrada(BigDecimal totalEntrada) {
 		this.totalEntrada = totalEntrada;
+	}
+	
+	public String getTurno() {
+		
+		return turno;
+	}
+	public void setTurno(String turno) {
+		this.turno = turno;
 	}
 	
 

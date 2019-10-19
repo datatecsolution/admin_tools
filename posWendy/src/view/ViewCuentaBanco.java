@@ -31,7 +31,7 @@ import view.rendes.TablaRenderizadorArticulos;
 import view.rendes.TablaRenderizadorProveedor;
 import view.tablemodel.CbxTmCuentasBancos;
 import view.tablemodel.CbxTmDepartamento;
-import view.tablemodel.TableModeloArticulo;
+import view.tablemodel.TmArticulo;
 import view.tablemodel.TmCuentasBanco;
 import controlador.CtlArticuloBuscar;
 import controlador.CtlArticuloLista;

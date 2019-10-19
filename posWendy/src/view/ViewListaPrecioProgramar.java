@@ -27,7 +27,7 @@ import view.botones.BotonImprimirSmall;
 import view.rendes.RenderizadorTablaFactura;
 import view.rendes.RenderizadorTablaFacturas;
 import view.rendes.TablaRenderizadorProveedor;
-import view.tablemodel.TableModeloArticulo;
+import view.tablemodel.TmArticulo;
 import view.tablemodel.TmPagos;
 import view.tablemodel.TmProgramarPrecio;
 
@@ -42,7 +42,7 @@ public class ViewListaPrecioProgramar  extends JDialog{
 	protected BotonAgregar btnAgregar;
 	protected BotonEliminar btnEliminar;
 	protected BotonImprimirSmall btnImprimir;
-	private ButtonGroup grupoOpciones; // grupo de botones que contiene los botones de opción
+	private ButtonGroup grupoOpciones; // grupo de botones que contiene los botones de opciï¿½n
 	
 	
 	
@@ -91,7 +91,7 @@ public class ViewListaPrecioProgramar  extends JDialog{
 		RenderizadorTablaFactura renderizador = new RenderizadorTablaFactura();
 		tablaArticulo.setDefaultRenderer(String.class, renderizador);
 		
-		tablaArticulo.getColumnModel().getColumn(0).setPreferredWidth(5);     //Tamaño de las columnas de las tablas
+		tablaArticulo.getColumnModel().getColumn(0).setPreferredWidth(5);     //Tamaï¿½o de las columnas de las tablas
 		tablaArticulo.getColumnModel().getColumn(1).setPreferredWidth(200);	//
 		tablaArticulo.getColumnModel().getColumn(2).setPreferredWidth(100);	//
 		tablaArticulo.getColumnModel().getColumn(3).setPreferredWidth(10);	//

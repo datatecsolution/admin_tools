@@ -14,7 +14,7 @@ import modelo.Factura;
 
 public class TmFacturasPago extends AbstractTableModel {
 	final private String []columnNames= {
-			"No Factura","Fecha", "Total","Estado","¿Pagar Factura?"
+			"No Factura","Fecha", "Total","Estado","Pagar Factura?"
 		};
 	private List<Factura> facturas=new ArrayList<Factura>();
 	

@@ -107,7 +107,7 @@ public class ViewAgregarCompras extends JDialog {
 		
 		panelProveedor=new PanelPadre();
 		panelProveedor.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Proveedor", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panelProveedor.setBounds(10, 90, 984, 78);
+		panelProveedor.setBounds(10, 90, 1007, 78);
 		panelProveedor.setLayout(null);
 		
 		Color color1 =new Color(60, 179, 113);
@@ -158,7 +158,7 @@ public class ViewAgregarCompras extends JDialog {
 		panelProveedor.add(btnBuscar);
 		
 		JPanel panelInfoCompra = new PanelPadre();
-		panelInfoCompra.setBounds(10, 11, 984, 80);
+		panelInfoCompra.setBounds(10, 11, 1007, 80);
 		panelInfoCompra.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Datos Generales", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		getContentPane().add(panelInfoCompra);
 		panelInfoCompra.setLayout(null);
@@ -226,12 +226,12 @@ public class ViewAgregarCompras extends JDialog {
 		//botones
 		btnGuardar = new BotonGuardar();
 		btnGuardar.setSize(128, 72);
-		btnGuardar.setLocation(32, 479);
+		btnGuardar.setLocation(42, 559);
 		//tnCancelar.setLocation(42, 175);
 		getContentPane().add(btnGuardar);
 		btnActualizar=new BotonActualizar();
 		btnActualizar.setSize(128, 72);
-		btnActualizar.setLocation(32, 477);
+		btnActualizar.setLocation(42, 559);
 		getContentPane().add(btnActualizar);
 		btnActualizar.setVisible(false);
 		
@@ -239,7 +239,7 @@ public class ViewAgregarCompras extends JDialog {
 		btnCancelar.setSize(128, 72);
 		
 		//btnCancelar.setBounds(212, 175, 135, 39);
-		btnCancelar.setLocation(270, 479);
+		btnCancelar.setLocation(270, 559);
 		getContentPane().add(btnCancelar);
 		
 		
@@ -265,13 +265,13 @@ public class ViewAgregarCompras extends JDialog {
 		//Estitlo para la tabla		
 		
 		JScrollPane scrollPane = new JScrollPane(tablaArticulos);
-		scrollPane.setBounds(10, 171, 984, 250);
+		scrollPane.setBounds(10, 171, 1007, 301);
 		scrollPane.setBackground(color3);
 		scrollPane.getViewport().setBackground(color3);
 		getContentPane().add(scrollPane);
 		
 		panel = new PanelPadre();
-		panel.setBounds(664, 412, 330, 160);
+		panel.setBounds(664, 492, 330, 160);
 		getContentPane().add(panel);
 		panel.setLayout(null);
 		
@@ -324,7 +324,7 @@ public class ViewAgregarCompras extends JDialog {
 		///DetalleFacturaProveedor uno= new DetalleFacturaProveedor();
 		
 		//modelo.agregarDetalle(uno);
-		this.setSize(1000, 600);
+		this.setSize(1050, 700);
 		
 		//centrar la ventana en la pantalla
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

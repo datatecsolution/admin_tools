@@ -23,7 +23,7 @@ import modelo.dao.RequisicionDao;
 import modelo.dao.UsuarioDao;
 import view.ViewListaRequisiciones;
 import view.ViewRequisicion;
-import view.tablemodel.TableModeloArticulo;
+import view.tablemodel.TmArticulo;
 
 public class CtlRequisicionesLista implements ActionListener, MouseListener, ChangeListener {
 	

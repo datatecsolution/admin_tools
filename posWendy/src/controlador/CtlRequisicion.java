@@ -82,7 +82,21 @@ public class CtlRequisicion implements ActionListener, MouseListener, TableModel
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+		//Recoger qu� fila se ha pulsadao en la tabla
+				filaPulsada = this.view.getTablaArticulos().getSelectedRow();
+				
+					switch(e.getKeyCode()){
+							
+							case KeyEvent.VK_F1:
+									buscarArticulo();
+								break;
+							case KeyEvent.VK_DELETE:
+								if(filaPulsada>=0){
+									 this.view.getModelo().eliminarDetalle(filaPulsada);
+									 this.calcularTotales();
+								 }
+								break;
+					}		
 	}
 
 	@Override
@@ -610,15 +624,17 @@ public void calcularTotales(){
 		
 		
 	}
-	private void selectRowInset(){
-		/*<<<<<<<<<<<<<<<selecionar la ultima fila creada>>>>>>>>>>>>>>>*/
-		int row =  this.view.getTablaArticulos().getRowCount () - 2;
-		Rectangle rect = this.view.getTablaArticulos().getCellRect(row, 0, true);
-		this.view.getTablaArticulos().scrollRectToVisible(rect);
-		this.view.getTablaArticulos().clearSelection();
-		this.view.getTablaArticulos().setRowSelectionInterval(row, row);
-		TabloModeloRequisicion modelo = (TabloModeloRequisicion)this.view.getTablaArticulos().getModel();
-		modelo.fireTableDataChanged();
+private void selectRowInset(){
+		
+		int row = this.view.getTablaArticulos().getRowCount () - 2;
+	    int col = 1;
+	    boolean toggle = false;
+	    boolean extend = false;
+	    this.view.getTablaArticulos().changeSelection(row, 0, toggle, extend);
+	    this.view.getTablaArticulos().changeSelection(row, col, toggle, extend);
+	    this.view.getTablaArticulos().addColumnSelectionInterval(0, 6);
+		
+		
 	}
 
 	@Override

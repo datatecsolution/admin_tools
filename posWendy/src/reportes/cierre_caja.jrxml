@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cierre_caja" pageWidth="216" pageHeight="720" columnWidth="190" leftMargin="16" rightMargin="10" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -29,7 +29,7 @@
 	<parameter name="SUBREPORT_INPUT_STREAM" class="java.io.InputStream"/>
 	<parameter name="bD_admin" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT *
+		<![CDATA[SELECT * 
 FROM $P!{bD_admin}.cierre_caja
 
 WHERE
@@ -162,8 +162,9 @@ WHERE
 	<field name="fecha_inicio" class="java.sql.Timestamp"/>
 	<field name="fecha_final" class="java.sql.Timestamp"/>
 	<field name="total_entrada" class="java.lang.Float"/>
+	<field name="turno" class="java.lang.String"/>
 	<title>
-		<band height="163" splitType="Stretch">
+		<band height="169" splitType="Stretch">
 			<staticText>
 				<reportElement style="Title" x="0" y="91" width="188" height="16" uuid="bc1ce1da-8232-46ea-be55-cec4abb986dd"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -178,15 +179,15 @@ WHERE
 				</textElement>
 				<textFieldExpression><![CDATA[$F{usuario}]]></textFieldExpression>
 			</textField>
-			<textField pattern="M/d/yy h:mm:ss a">
-				<reportElement x="79" y="124" width="108" height="13" uuid="9728e7a6-4f41-4354-a5e8-0e638e21fa3d"/>
+			<textField pattern="d/M/yy h:mm:ss a">
+				<reportElement x="79" y="137" width="108" height="13" uuid="9728e7a6-4f41-4354-a5e8-0e638e21fa3d"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Monospaced" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha_inicio}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="4" y="124" width="74" height="13" uuid="3a90ba1f-70be-49e8-9bf0-037953222adb"/>
+				<reportElement x="4" y="137" width="74" height="13" uuid="3a90ba1f-70be-49e8-9bf0-037953222adb"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Monospaced" size="9"/>
 				</textElement>
@@ -208,19 +209,33 @@ WHERE
 				<subreportExpression><![CDATA["reportes/factura_datos_empresa.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement x="4" y="137" width="74" height="13" uuid="66b97457-4824-4828-8d87-207faebd0686"/>
+				<reportElement x="4" y="150" width="74" height="13" uuid="66b97457-4824-4828-8d87-207faebd0686"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Monospaced" size="9"/>
 				</textElement>
 				<text><![CDATA[FECHA FINAL:]]></text>
 			</staticText>
-			<textField pattern="M/d/yy h:mm:ss a">
-				<reportElement x="79" y="137" width="108" height="13" uuid="ca3e5d48-f65b-4621-b323-a1c824399431"/>
+			<textField pattern="d/M/yy h:mm:ss a">
+				<reportElement x="79" y="150" width="108" height="13" uuid="ca3e5d48-f65b-4621-b323-a1c824399431"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Monospaced" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha_final}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="52" y="125" width="136" height="13" uuid="f2a961a9-29f9-404d-bbca-c90920facc7e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{turno}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="125" width="46" height="13" uuid="7069694c-a7e2-447f-912c-003d289672b8"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<text><![CDATA[TURNO:]]></text>
+			</staticText>
 		</band>
 	</title>
 	<detail>

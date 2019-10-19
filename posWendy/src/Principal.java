@@ -1,6 +1,7 @@
 
 
 
+import java.awt.Insets;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -18,27 +19,36 @@ import modelo.ConexionStatic;
 import modelo.ConfigUserFacturacion;
 import modelo.Usuario;
 import modelo.dao.ConfigUserFactDao;
+import modelo.dao.FacturaDao;
 import view.ViewLogin;
 import view.ViewMenuPrincipal;
 import view.ViewModuloFacturar;
 import view.ViewOrdeneVenta;
 
 public class Principal {
+	//private FacturaDao facturaDao=null;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-	
+		
 		//se cargan todos los reportes
 		AbstractJasperReports.loadFileReport();
 		
 		//se establece la conecion a la base de datos
 		ConexionStatic.conectarBD();
 		
+		//se aplican los interes de las facturas vendidas
+		FacturaDao  facturaDao=new FacturaDao();
+		
+		facturaDao.aplicarInteresVenc();
+		
 		
 		try {
 		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 		        if ("Nimbus".equals(info.getName())) {
 		            UIManager.setLookAndFeel(info.getClassName());
+		            UIManager.getDefaults().put("TabbedPane.contentBorderInsets", new Insets(10,10,10,10));
+		    		UIManager.getDefaults().put("TabbedPane.tabsOverlapBorder", true);
 		            break;
 		        }
 		    }
@@ -56,6 +66,16 @@ public class Principal {
 		
 		if(login){
 			Usuario user=ConexionStatic.getUsuarioLogin();
+			
+			//se recogen las configuraciones para el usuario 
+			ConfigUserFactDao configDao=new ConfigUserFactDao();
+			
+			ConfigUserFacturacion conf=configDao.buscarPorUser(user.getUser());
+			
+			if(conf == null)
+				user.setConfig(new ConfigUserFacturacion()) ;
+			else 
+				user.setConfig(conf);
 		/*	
 		if(user.getCajas()!=null)
 		{
@@ -107,15 +127,7 @@ public class Principal {
 				System.exit(0);*/
 				
 				if(user.getCajas()!=null){
-					//se recogen las configuraciones para el usuario 
-					ConfigUserFactDao configDao=new ConfigUserFactDao();
 					
-					ConfigUserFacturacion conf=configDao.buscarPorUser(user.getUser());
-					
-					if(conf == null)
-						user.setConfig(new ConfigUserFacturacion()) ;
-					else 
-						user.setConfig(conf);
 					
 					 ViewModuloFacturar marcoEscritorio = new ViewModuloFacturar();
 					 //CtlModuloFacturar ctlMarcoEscritorio=new CtlModuloFacturar(marcoEscritorio,conexion);

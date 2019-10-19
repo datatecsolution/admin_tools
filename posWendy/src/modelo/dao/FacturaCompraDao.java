@@ -122,22 +122,27 @@ public class FacturaCompraDao extends ModeloDaoBasic{
 				fac.setNoCompra(idFactura);
 			}
 			
-			//JOptionPane.showMessageDialog(null,""+idFactura);
+			//se recorren los detalles para guardalos 
 			for(int x=0;x<fac.getDetalles().size();x++){
 				//solo los articulos validos que no tengan id nulos
 				if(fac.getDetalles().get(x).getArticulo().getId()>0){
 					boolean resul=detallesDao.registrar(fac.getDetalles().get(x), idFactura,fac.getDepartamento().getId());
+					
+					//se crea el objeto precio venta para poder actualizarlo en la base de datos
+					PrecioArticulo precioVenta=new PrecioArticulo();
+					precioVenta.setCodigoArticulo(fac.getDetalles().get(x).getArticulo().getId());//se le asigna el codigo del articulo
+					precioVenta.setPrecio(new BigDecimal(fac.getDetalles().get(x).getArticulo().getPrecioVenta()));//se le asigna el precio
+					precioVenta.setCodigoPrecio(1);//se establece 1 porque es el codigo del precio del publico general
+					
+					this.preciosDao.actualizar(precioVenta);//se actualiza el precio
+					
+					//se actualiza el precio costo en la base de datos
+					if(fac.getDetalles().get(x).getArticulo().getPreciosVenta()!=null){
+						//el en la tabla el codigo tres es la base de datos
+						PrecioArticulo preciocosto=fac.getDetalles().get(x).getArticulo().getPreciosVenta().get(3);
+						this.preciosDao.actualizar(preciocosto);//se actualiza el precio
+					}
 				}
-				
-				
-				//se crea el objeto precio para poder actualizarlo en la base de datos
-				PrecioArticulo precioVenta=new PrecioArticulo();
-				precioVenta.setCodigoArticulo(fac.getDetalles().get(x).getArticulo().getId());//se le asigna el codigo del articulo
-				precioVenta.setPrecio(new BigDecimal(fac.getDetalles().get(x).getArticulo().getPrecioVenta()));//se le asigna el precio
-				precioVenta.setCodigoPrecio(1);//se establece 1 porque es el codigo del precio del publico general
-				
-				this.preciosDao.actualizar(precioVenta);//se actualiza el precio
-				
 	
 			}
 			

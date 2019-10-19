@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura_carta" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="556" leftMargin="28" rightMargin="28" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="ireport.zoom" value="2.0"/>
@@ -382,10 +382,6 @@ WHERE
 				<returnValue subreportVariable="factura_final" toVariable="factura_final"/>
 				<subreportExpression><![CDATA["reportes/factura_carta_datos_dei.jasper"]]></subreportExpression>
 			</subreport>
-			<image>
-				<reportElement x="14" y="1" width="65" height="49" uuid="3e04fdc0-0ddd-44a1-ae5e-29b1323d9d4b"/>
-				<imageExpression><![CDATA["reportes/logo-datec-solutions.png"]]></imageExpression>
-			</image>
 			<staticText>
 				<reportElement x="0" y="78" width="555" height="18" uuid="a3fd5dfe-8ca1-4ed0-bf56-4693e8632318"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -907,6 +903,20 @@ WHERE
 						<font fontName="SansSerif" size="10"/>
 					</textElement>
 					<text><![CDATA[Factura exonerada #: NA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="6" y="108" width="331" height="12" uuid="9ba01e27-561e-4a6a-8213-451e1f76b5c3"/>
+					<textElement>
+						<font fontName="SansSerif" size="10"/>
+					</textElement>
+					<text><![CDATA[Orden de compra exonerada #: NA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="6" y="122" width="331" height="12" uuid="a34d7006-5ee0-4ea5-80d3-3f707f51b908"/>
+					<textElement>
+						<font fontName="SansSerif" size="10"/>
+					</textElement>
+					<text><![CDATA[Registro SAG #: NA]]></text>
 				</staticText>
 			</frame>
 		</band>

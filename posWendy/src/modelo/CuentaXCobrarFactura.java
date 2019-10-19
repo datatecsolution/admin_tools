@@ -1,11 +1,12 @@
 package modelo;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 
 public class CuentaXCobrarFactura {
 	
 	private int noReguistro=-1;
-	private String fecha="";
+	private Date fecha;
 	private int codigoCuenta=-1;
 	private String descripcion="";
 	private BigDecimal saldo=new BigDecimal(0.0);
@@ -55,10 +56,10 @@ public class CuentaXCobrarFactura {
 	public int getNoReguistro(){
 		return noReguistro;
 	}
-	public void setFecha(String f){
+	public void setFecha(Date f){
 		fecha=f;
 	}
-	public String getFecha(){
+	public Date getFecha(){
 		return fecha;
 	}
 	

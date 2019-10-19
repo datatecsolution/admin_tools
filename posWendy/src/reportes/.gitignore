@@ -36,3 +36,8 @@
 /ventas_detalle_turno.jasper
 /ventas_detalle_articulo.jasper
 /cierre_ventas_detalle_categ.jasper
+/factura_tiket_datos_credito.jasper
+/factura_tiket_credito.jasper
+/factura_carta_credito.jasper
+/factura_carta_datos_credito.jasper
+/cliente_cuenta_factura.jasper

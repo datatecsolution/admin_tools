@@ -12,7 +12,11 @@ import modelo.Impuesto;
 
 public class ComboBoxImpuesto extends DefaultComboBoxModel {
 	
-	private Vector<Impuesto> impuestos;
+	private Vector<Impuesto> impuestos=new Vector<Impuesto>();
+	
+	public void agregar(Impuesto i){
+		impuestos.add(i);
+	}
 
 	@Override
 	public int getSize() {

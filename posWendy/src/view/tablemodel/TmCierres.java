@@ -8,7 +8,7 @@ import javax.swing.table.AbstractTableModel;
 import modelo.CierreCaja;
 
 public class TmCierres extends TablaModelo {
-	private String []columnNames={"Fecha","Cajero","T Efectivo","T Tarjeta","T Credito","ISV15","ISV18","Total"};
+	private String []columnNames={"Fecha","Cajero","Turno","T Efectivo","T Tarjeta","T Credito","ISV15","ISV18","Total"};
 	private List<CierreCaja> cierres = new ArrayList<CierreCaja>();
 	
 	public void agregar(CierreCaja cierre) {
@@ -61,17 +61,19 @@ public class TmCierres extends TablaModelo {
 				return cierres.get(rowIndex).getFecha();
 		case 1: 
 			return cierres.get(rowIndex).getUsuario();
-		case 2: 
+		case 2:
+			return cierres.get(rowIndex).getTurno();
+		case 3: 
 			return cierres.get(rowIndex).getEfectivo().toString();
-		case 3:
-			return cierres.get(rowIndex).getTarjeta().toString();
 		case 4:
-			return cierres.get(rowIndex).getCredito().toString();
+			return cierres.get(rowIndex).getTarjeta().toString();
 		case 5:
-			return cierres.get(rowIndex).getIsv15().toString();
+			return cierres.get(rowIndex).getCredito().toString();
 		case 6:
-			return cierres.get(rowIndex).getIsv18().toString();
+			return cierres.get(rowIndex).getIsv15().toString();
 		case 7:
+			return cierres.get(rowIndex).getIsv18().toString();
+		case 8:
 			return cierres.get(rowIndex).getTotal().toString();
 		default:
             return null;

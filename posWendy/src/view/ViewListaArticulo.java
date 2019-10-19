@@ -28,7 +28,7 @@ import view.rendes.PanelPadre;
 import view.rendes.TablaRenderizadorArticulos;
 import view.rendes.TablaRenderizadorProveedor;
 import view.tablemodel.CbxTmDepartamento;
-import view.tablemodel.TableModeloArticulo;
+import view.tablemodel.TmArticulo;
 import controlador.CtlArticuloBuscar;
 import controlador.CtlArticuloLista;
 import modelo.Departamento;
@@ -48,7 +48,7 @@ public class ViewListaArticulo extends ViewTabla {
 	
 	private JRadioButton rdbtnMarca;
 
-	private TableModeloArticulo modelo;
+	private TmArticulo modelo;
 	
 	
 	
@@ -126,7 +126,7 @@ public class ViewListaArticulo extends ViewTabla {
 		
         
         //tabla y sus componentes
-		modelo=new TableModeloArticulo();
+		modelo=new TmArticulo();
 		
 		tabla.setModel(modelo);
 		TablaRenderizadorArticulos renderizador = new TablaRenderizadorArticulos();
@@ -206,7 +206,7 @@ public class ViewListaArticulo extends ViewTabla {
 	
 	
 	
-	public TableModeloArticulo getModelo(){
+	public TmArticulo getModelo(){
 		return modelo;
 	}
 	public JButton getBtnEliminar(){

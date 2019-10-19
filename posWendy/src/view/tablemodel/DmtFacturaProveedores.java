@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 import modelo.Articulo;
@@ -19,7 +19,7 @@ import modelo.DetalleFacturaProveedor;
 public class DmtFacturaProveedores extends AbstractTableModel {
 	
 	final private String []columnNames= {
-			"Id Articulo", "Nombre", "Cantidad", "Precio Unidad","SubTotal","Impuesto", "Total","Precio venta","IVA incluido?"
+			"Id Articulo", "Nombre", "Cantidad", "Precio Unidad","SubTotal","Impuesto", "Total","Precio venta","Precio costo","IVA incluido?"
 		};
 	private List<DetalleFacturaProveedor> detallesFactura=new ArrayList<DetalleFacturaProveedor>();
 	private double totalCompra=0;
@@ -145,6 +145,14 @@ public class DmtFacturaProveedores extends AbstractTableModel {
 		        		}else
 		        			return null;
 		        case 8:
+		        	if(detallesFactura.get(rowIndex).getArticulo().getPreciosVenta()!=null){
+	        			
+	        			return detallesFactura.get(rowIndex).getArticulo().getPreciosVenta().get(3).getPrecio();
+	        			
+	        		}else
+	        			return null;
+		        	
+		        case 9:
 		        	return detallesFactura.get(rowIndex).isIvaIncludo();
 		        	
 		        default:
@@ -177,7 +185,7 @@ public class DmtFacturaProveedores extends AbstractTableModel {
 		
 		String v = null;
 		Boolean vv = true;
-		if(columnIndex==8)
+		if(columnIndex==9)
 			vv=(Boolean) value;
 		else
 			v=(String) value;
@@ -232,6 +240,17 @@ public class DmtFacturaProveedores extends AbstractTableModel {
 					fireTableCellUpdated(rowIndex, columnIndex);
 				break;
 			case 8:
+				if(detallesFactura.get(rowIndex).getArticulo().getPreciosVenta()!=null){
+        			
+        			detallesFactura.get(rowIndex).getArticulo().getPreciosVenta().get(3).setPrecio(new BigDecimal(v));;
+        			fireTableCellUpdated(rowIndex, columnIndex);
+        			
+        		}else{
+        			JOptionPane.showMessageDialog(null,"El articulo no tiene precio de costo.","Error en articulo",JOptionPane.ERROR_MESSAGE); 
+        		}
+	        	
+				break;
+			case 9:
 				detallesFactura.get(rowIndex).setIvaIncludo(vv);
 				fireTableCellUpdated(rowIndex, columnIndex);
 				break;
@@ -245,7 +264,7 @@ public class DmtFacturaProveedores extends AbstractTableModel {
 @Override
 public Class getColumnClass(int columnIndex) {
 	//        return getValueAt(0, columnIndex).getClass();
-	if(columnIndex==8)
+	if(columnIndex==9)
 		return Boolean.class;
 	else
 		return String.class;
@@ -274,6 +293,8 @@ public boolean isCellEditable(int rowIndex, int columnIndex) {
 	if(columnIndex==7)
 		resul=true;
 	if(columnIndex==8)
+		resul=true;
+	if(columnIndex==9)
 		resul=true;
 	
 	

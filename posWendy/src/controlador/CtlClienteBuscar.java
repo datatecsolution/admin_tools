@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import modelo.Cliente;
 import modelo.dao.ClienteDao;
 import modelo.Conexion;
+import modelo.ConexionStatic;
 import view.tablemodel.TmCategorias;
 import view.ViewCrearCliente;
 import view.ViewFacturar;
@@ -55,8 +56,11 @@ public class CtlClienteBuscar implements ActionListener ,MouseListener, WindowLi
 public boolean buscarCliente(Window v){
 		
 		//this.myArticuloDao.cargarInstrucciones();
-	cargarTabla(clienteDao.todos(view.getModelo().getCanItemPag(),view.getModelo().getLimiteSuperior()));
+		cargarTabla(clienteDao.todos(view.getModelo().getCanItemPag(),view.getModelo().getLimiteSuperior()));
 		//this.view.getBtnEliminar().setEnabled(false);
+		if(ConexionStatic.getUsuarioLogin().getConfig().isAgregarClienteCredito()){
+			this.view.getBtnAgregar().setEnabled(true);
+		}
 		//this.view.getBtnAgregar().setEnabled(false);
 		this.view.setLocationRelativeTo(v);
 		this.view.setModal(true);

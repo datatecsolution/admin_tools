@@ -34,7 +34,7 @@ import view.botones.BotonKardex;
 import view.botones.BotonLimpiar;
 import view.rendes.PanelPadre;
 import view.rendes.TablaRenderizadorProveedor;
-import view.tablemodel.TableModeloArticulo;
+import view.tablemodel.TmArticulo;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.awt.event.ActionEvent;

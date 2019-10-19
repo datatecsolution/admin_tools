@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Factura_Pos" pageWidth="208" pageHeight="720" columnWidth="180" leftMargin="18" rightMargin="10" topMargin="7" bottomMargin="7" isIgnorePagination="true" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -601,9 +601,9 @@ WHERE
 		</band>
 	</detail>
 	<summary>
-		<band height="294">
+		<band height="283">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="2" width="180" height="288" forecolor="#D0B48E" backcolor="#FFFFFF" uuid="5d8169bd-4a75-48c8-8a68-6d3ad5ba9402"/>
+				<reportElement mode="Opaque" x="0" y="2" width="180" height="278" forecolor="#D0B48E" backcolor="#FFFFFF" uuid="5d8169bd-4a75-48c8-8a68-6d3ad5ba9402"/>
 				<textField pattern="¤ #,##0.00">
 					<reportElement x="114" y="52" width="66" height="12" uuid="1639fd03-04ec-4493-8e17-f0ecd7f5978e"/>
 					<box rightPadding="3"/>
@@ -708,18 +708,11 @@ WHERE
 					<textFieldExpression><![CDATA[$F{cambio}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="0" y="246" width="180" height="12" uuid="af7f8f6e-6ef9-4e34-bd56-44841283a089"/>
-					<textElement textAlignment="Center">
+					<reportElement x="0" y="246" width="180" height="14" uuid="af7f8f6e-6ef9-4e34-bd56-44841283a089"/>
+					<textElement textAlignment="Justified">
 						<font fontName="SansSerif" size="8"/>
 					</textElement>
-					<text><![CDATA[EXIJA SU FACTURA]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="0" y="256" width="180" height="12" uuid="cdd24937-5046-4d2f-a608-fcc3c254f5fd"/>
-					<textElement textAlignment="Center">
-						<font fontName="SansSerif" size="8"/>
-					</textElement>
-					<text><![CDATA[es beneficio de todos]]></text>
+					<text><![CDATA[EXIJA SU FACTURA, es beneficio de todos.]]></text>
 				</staticText>
 				<textField>
 					<reportElement x="4" y="97" width="174" height="26" uuid="ab52f911-72d8-48b6-b382-2285b2a72ae0"/>
@@ -737,7 +730,7 @@ WHERE
 					</graphicElement>
 				</line>
 				<staticText>
-					<reportElement x="5" y="272" width="172" height="12" uuid="99d487d9-992a-4e78-aa58-dc8f6f987069"/>
+					<reportElement x="5" y="263" width="172" height="12" uuid="99d487d9-992a-4e78-aa58-dc8f6f987069"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font fontName="SansSerif" size="6"/>
 					</textElement>

@@ -134,57 +134,6 @@ public class BancosDao extends ModeloDaoBasic{
 		
 	}
 	
-	public boolean registrar(Banco myCuenta) {
-		// TODO Auto-generated method stub
-		int resultado=0;
-		ResultSet rs=null;
-		Connection con = null;
-		
-		try 
-		{
-			con = ConexionStatic.getPoolConexion().getConnection();
-			
-			psConsultas=con.prepareStatement( super.getQueryInsert()+"(nombre,no_cuenta,id_tipo_cuenta) VALUES (?,?,?)");
-			
-			psConsultas.setString( 1, myCuenta.getNombre() );
-			psConsultas.setString( 2,myCuenta.getNoCuenta() );
-			psConsultas.setInt( 3, myCuenta.getIdTipoCuenta());
-			
-				
-			
-			
-			resultado=psConsultas.executeUpdate();
-			
-			rs=psConsultas.getGeneratedKeys(); //obtengo las ultimas llaves generadas
-			while(rs.next()){
-				this.setIdRegistrado(rs.getInt(1));
-			}
-			
-			
-			
-			
-
-			return true;
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, e.getMessage(),"Error en la base de datos",JOptionPane.ERROR_MESSAGE);
-            return false;
-		}
-		finally
-		{
-			try{
-				if(rs!=null)rs.close();
-				 if(psConsultas != null)psConsultas.close();
-	              if(con != null) con.close();
-			} // fin de try
-			catch ( SQLException excepcionSql )
-			{
-				excepcionSql.printStackTrace();
-				//conexion.desconectar();
-			} // fin de catch
-		} // fin de finally
-	}
 	public void setIdRegistrado(int i){
 		idRegistrado=i;
 	}
@@ -299,7 +248,55 @@ public class BancosDao extends ModeloDaoBasic{
 	@Override
 	public boolean registrar(Object c) {
 		// TODO Auto-generated method stub
-		return false;
+		Banco myCuenta=(Banco)c;
+		int resultado=0;
+		ResultSet rs=null;
+		Connection con = null;
+		
+		try 
+		{
+			con = ConexionStatic.getPoolConexion().getConnection();
+			
+			psConsultas=con.prepareStatement( super.getQueryInsert()+"(nombre,no_cuenta,id_tipo_cuenta) VALUES (?,?,?)");
+			
+			psConsultas.setString( 1, myCuenta.getNombre() );
+			psConsultas.setString( 2,myCuenta.getNoCuenta() );
+			psConsultas.setInt( 3, myCuenta.getIdTipoCuenta());
+			
+				
+			
+			
+			resultado=psConsultas.executeUpdate();
+			
+			rs=psConsultas.getGeneratedKeys(); //obtengo las ultimas llaves generadas
+			while(rs.next()){
+				this.setIdRegistrado(rs.getInt(1));
+			}
+			
+			
+			
+			
+
+			return true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e.getMessage(),"Error en la base de datos",JOptionPane.ERROR_MESSAGE);
+            return false;
+		}
+		finally
+		{
+			try{
+				if(rs!=null)rs.close();
+				 if(psConsultas != null)psConsultas.close();
+	              if(con != null) con.close();
+			} // fin de try
+			catch ( SQLException excepcionSql )
+			{
+				excepcionSql.printStackTrace();
+				//conexion.desconectar();
+			} // fin de catch
+		} // fin de finally
 	}
 	@Override
 	public Object buscarPorId(int id) {

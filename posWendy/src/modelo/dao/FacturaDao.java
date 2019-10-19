@@ -159,6 +159,7 @@ public class FacturaDao extends ModeloDaoBasic {
 		//se coloca la base de datos donde se guardara la factura, 
 		String sql=super.getQueryInsert()+" ("
 				+ "fecha,"
+				+ "fecha_vencimiento, "
 				+ "subtotal,"
 				+ "impuesto,"
 				+ "total,"
@@ -181,8 +182,14 @@ public class FacturaDao extends ModeloDaoBasic {
 				+ "isvOtros,"
 				+ "cod_rango,"
 				+ "cobro_tarjeta,"
-				+ "cobro_efectivo)"
-				+ " VALUES (now(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "cobro_efectivo) "
+				+ " VALUES ("
+								+ " now(), "
+								+ " DATE_ADD(now(), INTERVAL (SELECT dia_vencimiento_factura from config_app LIMIT 1) DAY), "
+								+ " ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? "
+						+ ")";
+		
+		
 		
 		try 
 		{
@@ -219,9 +226,10 @@ public class FacturaDao extends ModeloDaoBasic {
 			psConsultas.setBigDecimal(20, myFactura.getTotalOtrosImpuesto1());
 			
 			
+			
 			//para relacionar el codigo de cai con cada factura
 			DatosFacturacionDao caja=new DatosFacturacionDao();
-			psConsultas.setInt(21, caja.getIdCaiAct(modelo.ConexionStatic.getUsuarioLogin().getCajaActiva()));
+			psConsultas.setInt(21, caja.getIdCaiAct(ConexionStatic.getUsuarioLogin().getCajaActiva()));
 			
 			psConsultas.setBigDecimal(22, myFactura.getCobroTarjeta());
 			psConsultas.setBigDecimal(23, myFactura.getCobroEfectivo());
@@ -559,6 +567,48 @@ public class FacturaDao extends ModeloDaoBasic {
 			}
 			else return null;
 		
+	}
+	
+	public boolean aplicarInteresVenc() {
+		// TODO Auto-generated method stub
+		
+		
+		int resultado;
+		//boolean resultado=false;
+		Connection conn=null;
+		//fsdf
+		String sql="{call crear_interes_facturas()}";
+		try {
+			conn=ConexionStatic.getPoolConexion().getConnection();
+			
+			psConsultas=conn.prepareStatement(sql);
+			
+			resultado=psConsultas.executeUpdate();
+			
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e.getMessage(),"Error en la base de datos",JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		finally
+		{
+			try{
+				
+				//if(res != null) res.close();
+                if(psConsultas != null)psConsultas.close();
+                if(conn != null) conn.close();
+                
+				
+				} // fin de try
+				catch ( SQLException excepcionSql )
+				{
+					excepcionSql.printStackTrace();
+					//conexion.desconectar();
+				} // fin de catch
+		} // fin de finally
+	//	return resultado;
 	}
 
 	public boolean anularFactura(Factura f) {

@@ -48,6 +48,7 @@ public class CierreCajaDao extends ModeloDaoBasic {
 					+ " cierre_caja.isv15, "
 					+ " cierre_caja.isv18, "
 					+ " cierre_caja.totalventa, "
+					+ " cierre_caja.turno, "
 					+ " ifnull(cierre_caja.totalimpuesto,0)AS totalimpuesto, "
 					+ " ifnull(cierre_caja.tarjeta, 0)AS tarjeta, "
 					+ " ifnull(cierre_caja.usuario, ' ')AS usuario "
@@ -203,28 +204,28 @@ public class CierreCajaDao extends ModeloDaoBasic {
 		 
 		 
 		 String sql=super.getQueryUpdate()+ " set "
-		 		+ "fecha=now(),"
-		 		+ "fecha_final=now(),"
-		 		+ "factura_final=?,"
-		 		+ "efectivo=?,"
-		 		+ "creditos=?,"
-		 		+ "tarjeta=?,"
-		 		+ "isv15=?,"
-		 		+ "isv18=?,"
-		 		+ "total_isv15=?,"
-		 		+ "total_isv18=?,"
-		 		+ "total_excento=?,"
-		 		+ "estado=?,"
-		 		+ "total_efectivo=?,"
-		 		+ "totalventa=?,"
-		 		+ "no_salida_final=?,"
-		 		+ "total_salida=? ,"
-		 		+ "no_entrada_final=?,"
-		 		+ "total_entrada=? ,"
+		 		//+ "fecha=now(),"
+		 		+ "fecha_final=now(), "
+		 		+ "factura_final=?, "
+		 		+ "efectivo=?, "
+		 		+ "creditos=?, "
+		 		+ "tarjeta=?, "
+		 		+ "isv15=?, "
+		 		+ "isv18=?, "
+		 		+ "total_isv15=?, "
+		 		+ "total_isv18=?, "
+		 		+ "total_excento=?, "
+		 		+ "estado=?, "
+		 		+ "total_efectivo=?, "
+		 		+ "totalventa=?, "
+		 		+ "no_salida_final=?, "
+		 		+ "total_salida=?, "
+		 		+ "no_entrada_final=?, "
+		 		+ "total_entrada=?, "
 		 		+ "no_cobro_final=?, "
-		 		+ "total_cobro=?,"
-		 		+ "efectivo_caja =?,"
-		 		+ "no_pago_final=?,"
+		 		+ "total_cobro=?, "
+		 		+ "efectivo_caja =?, "
+		 		+ "no_pago_final=?, "
 		 		+ "total_pago=? "
 		 		+ "where "
 		 		+ "idCierre=?";
@@ -532,6 +533,7 @@ public CierreCaja getCierreUltimoUser(){
 				
 				unaCierre.setNoPagoInicial(res.getInt("no_pago_inicial"));
 				unaCierre.setNoPagoFinal(res.getInt("no_pago_final"));
+				unaCierre.setTurno(res.getString("turno"));
 				
 				//CierreFacturacionDao cierreFactura=new CierreFacturacionDao();
 				
@@ -1218,6 +1220,7 @@ private CierreCaja getCalcularCierre2(){
 				
 				unaCierre.setTotal(res.getBigDecimal("totalventa"));
 				unaCierre.setUsuario(res.getString("usuario"));
+				unaCierre.setTurno(res.getString("turno"));
 				
 				
 				cierres.add(unaCierre);
@@ -1283,6 +1286,7 @@ private CierreCaja getCalcularCierre2(){
 				
 				unaCierre.setTotal(res.getBigDecimal("totalventa"));
 				unaCierre.setUsuario(res.getString("usuario"));
+				unaCierre.setTurno(res.getString("turno"));
 				
 				
 				cierres.add(unaCierre);
@@ -1358,6 +1362,7 @@ private CierreCaja getCalcularCierre2(){
 				
 				unaCierre.setTotal(res.getBigDecimal("totalventa"));
 				unaCierre.setUsuario(res.getString("usuario"));
+				unaCierre.setTurno(res.getString("turno"));
 				
 			
 				

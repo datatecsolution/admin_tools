@@ -8,9 +8,13 @@ import java.io.InputStream;
 import java.net.URL;
 import java.security.Principal;
 import java.util.Properties;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.sql.DataSource;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
@@ -81,6 +85,40 @@ public abstract class ConexionStatic {
        }        
        return conStatus;
    }
+   
+   public static boolean isDbConnected() {
+	    final String CHECK_SQL_QUERY = "SELECT 1";
+	    Connection con = null;
+	    PreparedStatement statement=null;
+	    
+	    boolean isConnected = false;
+	    
+	    try {
+	    	con=getPoolConexion().getConnection();
+	        statement = con.prepareStatement(CHECK_SQL_QUERY);
+	        statement.executeQuery();
+	        isConnected = true;
+	    } catch (SQLException | NullPointerException e) {
+	        // handle SQL error here!
+	    	e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "No se pudo estrablecer una conexion con la base datos.","Error de conexion.",JOptionPane.ERROR_MESSAGE);
+	    }
+	    finally
+		{
+			try{
+			//	if(res != null) res.close();
+		        if(statement != null)statement.close();
+		        if(con != null) con.close();
+				
+				} // fin de try
+				catch ( SQLException excepcionSql )
+				{
+					excepcionSql.printStackTrace();
+					//conexion.desconectar();
+				} // fin de catch
+		}
+	    return isConnected;
+	}
    
    
    private static DataSource setDataSource(String dbType){

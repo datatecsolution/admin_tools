@@ -17,6 +17,8 @@ public class ConfigUserFacturacion {
 	private boolean imprReportEntrada=false;
 	private boolean showReportEntrada=false;
 	private boolean activarBusquedaFacturacion=false;
+	private boolean agregarClienteCredito=false;
+	private String formatoFacturaCredito="tiket";
 	/**
 	 * @return the id
 	 */
@@ -210,6 +212,18 @@ public class ConfigUserFacturacion {
 				+ ", showReportSalida=" + showReportSalida + ", imprReportEntrada=" + imprReportEntrada
 				+ ", showReportEntrada=" + showReportEntrada + ", activarBusquedaFacturacion="
 				+ activarBusquedaFacturacion + "]";
+	}
+	public boolean isAgregarClienteCredito() {
+		return agregarClienteCredito;
+	}
+	public void setAgregarClienteCredito(boolean agregarClienteCredito) {
+		this.agregarClienteCredito = agregarClienteCredito;
+	}
+	public String getFormatoFacturaCredito() {
+		return formatoFacturaCredito;
+	}
+	public void setFormatoFacturaCredito(String formatoFacturaCredito) {
+		this.formatoFacturaCredito = formatoFacturaCredito;
 	}
 	
 

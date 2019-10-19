@@ -9,7 +9,7 @@ import modelo.Articulo;
 
 
 
-public class TableModeloArticulo extends TablaModelo {
+public class TmArticulo extends TablaModelo {
 	
 	/**
 	 * 

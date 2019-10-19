@@ -16,12 +16,14 @@ import javax.swing.JOptionPane;
 import modelo.AbstractJasperReports;
 import modelo.dao.ArticuloDao;
 import modelo.dao.CierreCajaDao;
+import modelo.dao.FacturaDao;
 import modelo.Conexion;
 import modelo.ConexionStatic;
 import view.ViewAgregarCompras;
 import view.ViewCrearCaja;
 import view.ViewCrearDatosFacturacion;
 import view.ViewCuentaBanco;
+import view.ViewCuentasFacturas;
 import view.ViewCxCPagos;
 import view.ViewFacturar;
 import view.ViewFacturas;
@@ -57,6 +59,7 @@ public class CtlMenuPrincipal implements ActionListener,WindowListener, Runnable
 	public ViewMenuPrincipal view;
 
 	private ArticuloDao myArticuloDao=null;
+	private FacturaDao facturaDao=null;
 	
 	
 	
@@ -64,6 +67,7 @@ public class CtlMenuPrincipal implements ActionListener,WindowListener, Runnable
 		
 		this.view=view;
 		myArticuloDao=new ArticuloDao();
+		facturaDao=new FacturaDao();
 		
 		// crea objeto ExecutorService para administrar los subprocesos
 		ExecutorService ejecutorSubprocesos = Executors.newCachedThreadPool();
@@ -94,6 +98,20 @@ public class CtlMenuPrincipal implements ActionListener,WindowListener, Runnable
 		JDialog.setDefaultLookAndFeelDecorated(true);
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		switch(comando){
+		  
+		case "FACT_VENCIDAS":
+			ViewCuentasFacturas viewCuentasFacturas=new ViewCuentasFacturas(view);
+			CtlCuentasFacturas ctlCuentasFacturas=new CtlCuentasFacturas(viewCuentasFacturas);
+			break;
+		case "APLICAR_INTERES_FACT":
+			int resul=JOptionPane.showConfirmDialog(view, "Desea aplicar los interes a las facturas vencidas?");
+			if(resul==0){
+				boolean res=facturaDao.aplicarInteresVenc();
+				if(res){
+					JOptionPane.showMessageDialog(null,"Se aplicaron los intereses a las facturas vencidas.","Transaccion completada.",JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+			break;
 		
 		case "CONFIG_USUARIOS":
 			ViewListaConfigsUsuarios viewListaConfigsUsuarios=new ViewListaConfigsUsuarios(view);

@@ -293,23 +293,26 @@ switch(e.getKeyCode()){
 
 	public boolean validar(){
 		boolean comprobado=false;
-		//Double saldo=0.0;
-		//Double pago=0.0;
-		if(!AbstractJasperReports.isNumber(view.getTxtTotal().getText())||!AbstractJasperReports.isNumberReal(view.getTxtTotal().getText())){
-					JOptionPane.showMessageDialog(view, "No es un numero el total.","Error de validacion.",JOptionPane.ERROR_MESSAGE);
-					//sdf
-					view.getTxtTotal().setText("");
-					view.getTxtTotal().requestFocusInWindow();
-					view.getModeloFacturas().resetPago();
+		
+		//se comprueba que el total sea un numero entero o real
+		boolean comprobado1=AbstractJasperReports.isNumber(view.getTxtTotal().getText());
+		comprobado1=AbstractJasperReports.isNumber(view.getTxtTotal().getText()) || AbstractJasperReports.isNumberReal(view.getTxtTotal().getText());
+	
+		
+		if(comprobado1==false ){
+				JOptionPane.showMessageDialog(view, "El total No es un numero.","Error de validacion.",JOptionPane.ERROR_MESSAGE);
+				view.getTxtTotal().setText("");
+				view.getTxtTotal().requestFocusInWindow();
+				view.getModeloFacturas().resetPago();
 					
-		}
-			else{ 
-			if(view.getTxtNombrecliente().getText().trim().length()==0){
+		}else
+			{ 
 				
-				JOptionPane.showMessageDialog(view, "El no existe el cliente");
-				
-			}
-				else
+				if(view.getTxtNombrecliente().getText().trim().length()==0){
+					
+					JOptionPane.showMessageDialog(view, "El no existe el cliente");
+					
+				}else
 					if(view.getTxtLimiteCredito().getText().trim().length()==0){
 						JOptionPane.showMessageDialog(view, "El cliente no tiene credito");
 						//view.getTxtCantidad().requestFocusInWindow();
@@ -328,10 +331,6 @@ switch(e.getKeyCode()){
 								}
 								else{
 								
-									/*saldo=Double.parseDouble(view.getTxtSaldo().getText());
-									pago=Double.parseDouble(view.getTxtTotal().getText());
-									
-									if()*/
 								
 									comprobado=true;
 								}

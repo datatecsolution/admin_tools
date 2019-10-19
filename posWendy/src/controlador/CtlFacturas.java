@@ -117,9 +117,45 @@ public class CtlFacturas implements ActionListener, MouseListener, ChangeListene
         		//deer
         		try {
     				
-    				//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Factura_Saint_Paul_Reimpresion.jasper",myFactura.getIdFactura() );
-        			AbstractJasperReports.createReport(ConexionStatic.getPoolConexion().getConnection(), 3, myFactura.getIdFactura());
-        			AbstractJasperReports.showViewer(this.view);
+        			//si la factura es al contado se imprime con un formato especifico
+					if(myFactura.getTipoFactura()==1){
+						//si la configuracion de la impresion de la factura es tiket o carta
+						if(ConexionStatic.getUsuarioLogin().getConfig().getFormatoFactura().equals("tiket")){
+						
+							AbstractJasperReports.createReport(ConexionStatic.getPoolConexion().getConnection(),6, myFactura.getIdFactura());
+							AbstractJasperReports.showViewer(view);
+							//AbstractJasperReports.imprimierFactura();
+							//AbstractJasperReports.imprimierFactura();
+						}
+						
+						if(ConexionStatic.getUsuarioLogin().getConfig().getFormatoFactura().equals("carta")){
+								AbstractJasperReports.createReportFacturaCarta(ConexionStatic.getPoolConexion().getConnection(), myFactura.getIdFactura());
+								AbstractJasperReports.showViewer(view);
+								//AbstractJasperReports.imprimierFactura();
+								
+						}
+					}//fin de la impresion de la factura carta al contado
+					
+					if(myFactura.getTipoFactura()==2){
+						//si la configuracion de la impresion de la factura es tiket o carta
+						if(ConexionStatic.getUsuarioLogin().getConfig().getFormatoFacturaCredito().equals("tiket")){
+						
+							AbstractJasperReports.createReportFacturaTiketCredito(ConexionStatic.getPoolConexion().getConnection(), myFactura.getIdFactura());
+							AbstractJasperReports.showViewer(view);
+							//AbstractJasperReports.imprimierFactura();
+							//AbstractJasperReports.imprimierFactura();
+						}
+						
+						if(ConexionStatic.getUsuarioLogin().getConfig().getFormatoFacturaCredito().equals("carta")){
+								AbstractJasperReports.createReportFacturaCartaCredito(ConexionStatic.getPoolConexion().getConnection(), myFactura.getIdFactura());
+								AbstractJasperReports.showViewer(view);
+								//AbstractJasperReports.imprimierFactura();
+								
+						}
+					}
+        			
+        			
+        			
     				//AbstractJasperReports.imprimierFactura();
     				this.view.getBtnImprimir().setEnabled(false);
     				myFactura=null;
