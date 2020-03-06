@@ -12,6 +12,9 @@ public class Cliente {
 	private String rtn="CF";
 	private BigDecimal limiteCredito=new BigDecimal(0.0);
 	private BigDecimal saldoCuenta=new BigDecimal(0.0);
+	private Integer tipoCliente=0;
+	private Empleado vendedor=new Empleado();
+	private int idVendedor=-1;
 	
 	public Cliente(){
 		
@@ -83,5 +86,18 @@ public class Cliente {
 	@Override
 	public String toString(){
 		return "Id:"+id+", rtn:"+rtn+", nombre:"+nombre+", direccion:"+direccion+", telefono:"+telefono+", celular:"+celular;
+	}
+	public Integer getTipoCliente() {
+		return tipoCliente;
+	}
+	public void setTipoCliente(Integer tipoCliente) {
+		this.tipoCliente = tipoCliente;
+	}
+	public Empleado getVendedor() {
+		return vendedor;
+	}
+	public void setVendedor(Empleado v) {
+		this.idVendedor=v.getCodigo();
+		this.vendedor = v;
 	}
 }

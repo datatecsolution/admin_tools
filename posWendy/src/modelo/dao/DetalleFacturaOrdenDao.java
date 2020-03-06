@@ -20,6 +20,7 @@ public class DetalleFacturaOrdenDao extends ModeloDaoBasic {
 	
 	
 	private String sqlBaseJoin;
+	private PrecioArticuloDao preciosDao=new PrecioArticuloDao();
 	
 	public DetalleFacturaOrdenDao(){
 		super("detalle_factura_temp","id");
@@ -134,11 +135,17 @@ public class DetalleFacturaOrdenDao extends ModeloDaoBasic {
 				existe=true;
 				//se consigue el articulo del detalle
 				Articulo articuloDetalle= new Articulo();//articuloDao.buscarArticulo(res.getInt("codigo_articulo"));
+				
+				
+				
 				articuloDetalle.setId(res.getInt("codigo_articulo"));
 				articuloDetalle.setArticulo(res.getString("articulo"));
 				articuloDetalle.setPrecioVenta(res.getDouble("precio"));//se estable el precio del articulo
 				articuloDetalle.getImpuestoObj().setPorcentaje(res.getString("impuesto"));
 				articuloDetalle.getImpuestoObj().setId(res.getInt("codigo_impuesto"));
+				
+				//conseguir los precios del producto
+				articuloDetalle.setPreciosVenta(this.preciosDao.getPreciosArticulo(articuloDetalle.getId()));
 				
 				unDetalle.setListArticulos(articuloDetalle);//se agrega el articulo al 
 				unDetalle.setCantidad(res.getBigDecimal("cantidad"));

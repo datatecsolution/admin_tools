@@ -405,7 +405,7 @@ public class CtlCompras implements ActionListener,MouseListener,TableModelListen
 				}
 				
 				
-				if(colum==8){
+				if(colum==9){
 					calcularTotales();
 				}
 				

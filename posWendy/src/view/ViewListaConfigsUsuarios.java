@@ -10,6 +10,7 @@ import java.awt.Toolkit;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -32,6 +33,7 @@ import view.botones.BotonLimpiar;
 import view.rendes.PanelPadre;
 import view.rendes.TRconfigUsers;
 import view.rendes.TablaRenderizadorProveedor;
+import view.rendes.TrConfigUsers2;
 import view.tablemodel.TmCategorias;
 import view.tablemodel.TmConfigUser;
 import view.tablemodel.TmUsuarios;
@@ -96,8 +98,9 @@ public class ViewListaConfigsUsuarios extends ViewTabla {
 		modelo=new TmConfigUser();
 		
 		tabla.setModel(modelo);
-		TRconfigUsers renderizador = new TRconfigUsers();
-		tabla.setDefaultRenderer(String.class, renderizador);
+		TrConfigUsers2 renderizador2 = new TrConfigUsers2();
+		tabla.setDefaultRenderer(String.class, renderizador2);
+		
 		
 		//tabla.getColumnModel().getColumn(0).setPreferredWidth(5);     //Tama�o de las columnas de las tablas
 		//tabla.getColumnModel().getColumn(1).setPreferredWidth(200);	//

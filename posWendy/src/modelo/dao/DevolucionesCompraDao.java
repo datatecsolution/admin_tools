@@ -31,8 +31,9 @@ public class DevolucionesCompraDao extends ModeloDaoBasic {
 				+ "impuesto,"
 				+ "subtotal,"
 				+ "total,"
+				+ "codigo_bodega,"
 				+ "fecha"
-				+ ") VALUES (?,?,?,?,?,?,?,now())";
+				+ ") VALUES (?,?,?,?,?,?,?,?,now())";
 		Connection conn=null;
 		
 		try{
@@ -46,6 +47,7 @@ public class DevolucionesCompraDao extends ModeloDaoBasic {
 			psConsultas.setBigDecimal(5, detalle.getImpuesto());
 			psConsultas.setBigDecimal(6, detalle.getSubTotal());
 			psConsultas.setBigDecimal(7, detalle.getTotal());
+			psConsultas.setInt(8, detalle.getCodigoBodega());
 			psConsultas.executeUpdate();
 			
 			resultado=true;

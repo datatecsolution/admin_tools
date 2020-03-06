@@ -88,7 +88,7 @@ public class CtlArticuloLista extends MouseAdapter implements ActionListener, Wi
 		//se establece la bodega para todas las busqueda
 		myArticuloDao.setMyBodega(view.getModeloCbxDepartamento().getDepartamento(view.getCbxDepart().getSelectedIndex()));
 		
-		
+		//JOptionPane.showMessageDialog(view, "numero de pagina "+view.getModelo().getCanItemPag()+"-"+view.getModelo().getLimiteSuperior());
 		switch(comando){
 		
 		case "REPORTE_VENTA":
@@ -99,6 +99,25 @@ public class CtlArticuloLista extends MouseAdapter implements ActionListener, Wi
 			break;
 		
 		case "EXISTENCIA":
+			
+			Integer codigo=1;
+			
+			String codString=JOptionPane.showInputDialog(view, "Ingrese el codigo de precio");
+			
+			if(AbstractJasperReports.isNumber(codString)){
+			
+				codigo=Integer.parseInt(codString);
+			
+				try {
+					AbstractJasperReports.createReportArticulosPreios(ConexionStatic.getPoolConexion().getConnection(), ConexionStatic.getUsuarioLogin().getUser(),codigo);
+					//AbstractJasperReports.ImprimirCodigo();
+					AbstractJasperReports.showViewer(view);
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 			
 			/*
 			if(this.view.getTabla().getSelectedRow()>=0){
@@ -121,6 +140,8 @@ public class CtlArticuloLista extends MouseAdapter implements ActionListener, Wi
 					
 				}
 		}*/
+			
+			
 		
 			break;
 		
@@ -215,9 +236,10 @@ public class CtlArticuloLista extends MouseAdapter implements ActionListener, Wi
 					myArticulo.setEstado((myArticulo.isEstado() ? false:true));
 					//se manda a cambiar el estado
 					if(myArticuloDao.actualizarEstado(myArticulo));{
-						JOptionPane.showMessageDialog(view, "Se dio de "+(myArticulo.isEstado() ?" ALTA ":" BAJA ")  +" al articulo!!!", "Error al eliminar articulo", JOptionPane.INFORMATION_MESSAGE);
-						this.actionPerformed(new ActionEvent(this, resul, "BUSCAR"));
-			
+						JOptionPane.showMessageDialog(view, "Se dio de "+(myArticulo.isEstado() ?" ALTA ":" BAJA ")  +" al articulo!!!", "Resultado eliminar articulo.", JOptionPane.INFORMATION_MESSAGE);
+						this.actionPerformed(new ActionEvent(this, resul, "UPDATE"));
+						//JOptionPane.showMessageDialog(view, "ELIMINAR ARTICULO "+view.getModelo().getCanItemPag()+"-"+view.getModelo().getLimiteSuperior());
+						//view.getModelo().lastPag();
 					}
 					
 				}
@@ -264,6 +286,27 @@ public class CtlArticuloLista extends MouseAdapter implements ActionListener, Wi
 				e1.printStackTrace();
 			}
 			this.view.getBtnLimpiar().setEnabled(false);
+			break;
+			
+			
+		case "UPDATE":
+			
+			if(this.view.getRdbtnTodos().isSelected()){  
+				
+				
+				cargarTabla(myArticuloDao.todos(view.getModelo().getCanItemPag(),view.getModelo().getLimiteSuperior()));
+				
+				
+			}
+			if(view.getRdbtnArticulo().isSelected()){
+				cargarTabla(myArticuloDao.buscarArticulo(this.view.getTxtBuscar().getText(),view.getModelo().getLimiteSuperior(),view.getModelo().getCanItemPag()));
+			}
+			if(this.view.getRdbtnMarca().isSelected()){  
+				
+				cargarTabla(myArticuloDao.buscarArticuloMarca(this.view.getTxtBuscar().getText(),view.getModelo().getLimiteSuperior(),view.getModelo().getCanItemPag()));
+				}
+			//se establece el numero de pagina en la view
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
 			break;
 			
 		case "NEXT":

@@ -146,6 +146,7 @@ public class DetalleFacturaProveedorDao extends ModeloDaoBasic{
 				unDetalle.setImpuesto(res.getBigDecimal("impuesto_detalle"));
 				//unDetalle.setSubTotal(res.getDouble("subtotal"));
 				unDetalle.setSubTotal(res.getBigDecimal("subtotal_detalle"));
+				unDetalle.setCodigoBodega(res.getInt("codigo_bodega"));
 				
 				
 				

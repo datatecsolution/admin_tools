@@ -10,6 +10,7 @@ import java.awt.Window;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -28,9 +29,13 @@ import view.botones.BotonLimpiar;
 import view.botones.BotonReporte;
 import view.rendes.PanelPadre;
 import view.rendes.TablaRenderizadorProveedor;
+import view.tablemodel.CbxTmCajas;
+import view.tablemodel.CbxTmEmpleado;
 import view.tablemodel.TablaModeloCliente;
 import controlador.CtlClienteBuscar;
 import controlador.CtlClienteLista;
+import modelo.Caja;
+import modelo.Empleado;
 
 public class ViewListaClientes extends ViewTabla {
 	
@@ -46,6 +51,8 @@ public class ViewListaClientes extends ViewTabla {
 
 	private BotonReporte btnReporte;
 	private BotonCuenta btnCuenta;
+	private JComboBox<Empleado> cbxEmpleados;
+	private CbxTmEmpleado modeloListaEmpleados;
 	
 	
 	
@@ -72,6 +79,12 @@ public class ViewListaClientes extends ViewTabla {
 		rdbtnRtn = new JRadioButton("RTN",false);
 		panelOpcioneBusqueda.add(rdbtnRtn);
 		grupoOpciones.add(rdbtnRtn);
+		
+		modeloListaEmpleados=new CbxTmEmpleado();//comentar para poder mostrar en forma de diseno la ventana
+		modeloListaEmpleados.agregar(new Empleado());
+		
+		cbxEmpleados = new JComboBox<Empleado>(modeloListaEmpleados);
+		panelOpcioneBusqueda.add(cbxEmpleados);
 		
 		 //tabla y sus componentes
 		modelo=new TablaModeloCliente();
@@ -104,31 +117,52 @@ public class ViewListaClientes extends ViewTabla {
 	
 	public void conectarControladorBuscar(CtlClienteBuscar c){
 		
+		rdbtnTodos.addKeyListener(c);
+		
 		btnAgregar.addActionListener(c);
 		btnAgregar.setActionCommand("NUEVO");
+		btnAgregar.addKeyListener(c);
+		
+		this.btnEliminar.addKeyListener(c);
+		this.btnCuenta.addKeyListener(c);
+		this.btnLimpiar.addKeyListener(c);
+		this.btnReporte.addKeyListener(c);
 		
 		rdbtnId.addActionListener(c);
 		//rdbtnId.getActionCommand();
 		rdbtnId.setActionCommand("ID");
+		rdbtnId.addKeyListener(c);
 		
 		rdbtnNombre.addActionListener(c);
 		rdbtnNombre.setActionCommand("ESCRIBIR");
+		rdbtnNombre.addKeyListener(c);
 		
 		rdbtnRtn.addActionListener(c);
 		rdbtnRtn.setActionCommand("ESCRIBIR");
+		rdbtnRtn.addKeyListener(c);
 		
 		btnBuscar.addActionListener(c);
 		btnBuscar.setActionCommand("BUSCAR");
+		btnBuscar.addKeyListener(c);
 		
-		txtBuscar.addActionListener(c);
-		txtBuscar.setActionCommand("BUSCAR");
 		
 		
 		btnSiguiente.addActionListener(c);
-		 btnSiguiente.setActionCommand("NEXT");
+		btnSiguiente.setActionCommand("NEXT");
+		btnSiguiente.addKeyListener(c);
 		
 		tabla.addMouseListener(c);
 		tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tabla.addKeyListener(c);
+		
+		txtBuscar.addActionListener(c);
+		txtBuscar.setActionCommand("BUSCAR");
+		txtBuscar.addKeyListener(c);
+		
+		cbxEmpleados.addActionListener(c);
+		cbxEmpleados.setActionCommand("CAMBIOCOMBOBOX");
+		cbxEmpleados.addKeyListener(c);
+		
 	}
 	public void conectarControlador(CtlClienteLista c){
 		btnAgregar.addActionListener(c);
@@ -137,6 +171,9 @@ public class ViewListaClientes extends ViewTabla {
 		rdbtnId.addActionListener(c);
 		//rdbtnId.getActionCommand();
 		rdbtnId.setActionCommand("ID");
+		
+		cbxEmpleados.addActionListener(c);
+		cbxEmpleados.setActionCommand("CAMBIOCOMBOBOX");
 		
 		rdbtnNombre.addActionListener(c);
 		rdbtnNombre.setActionCommand("ESCRIBIR");
@@ -165,6 +202,20 @@ public class ViewListaClientes extends ViewTabla {
 		
 		tabla.addMouseListener(c);
 		tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	}
+
+	/**
+	 * @return the cbxEmpleados
+	 */
+	public JComboBox<Empleado> getCbxEmpleados() {
+		return cbxEmpleados;
+	}
+
+	/**
+	 * @return the modeloListaEmpleados
+	 */
+	public CbxTmEmpleado getModeloListaEmpleados() {
+		return modeloListaEmpleados;
 	}
 
 }

@@ -40,7 +40,7 @@ public class CtlFiltroRepComisiones implements ActionListener {
 		empleadoDao=new EmpleadoDao();
 		empleadoDao.setEstado(2);
 		view.conectarCtl(this);
-		agregarEmpleado(empleadoDao.todoEmpleadosVendedores());
+		
 		Date horaLocal=new Date();
 		view.getBuscar1().setDate(horaLocal);
 		view.getBuscar2().setDate(horaLocal);
@@ -50,6 +50,7 @@ public class CtlFiltroRepComisiones implements ActionListener {
 	private void agregarEmpleado(Vector<Empleado> empleados) {
 		// TODO Auto-generated method stub
 		if(empleados!=null){
+			comisiones.clear();
 			for(int x=0; x<empleados.size();x++){
 				Comision un=new Comision();
 				un.setCodigoVendedor(empleados.get(x).getCodigo());
@@ -70,6 +71,7 @@ public class CtlFiltroRepComisiones implements ActionListener {
 		switch(comando){
 		
 			case "GENERAR":
+				agregarEmpleado(empleadoDao.todoEmpleadosVendedores());
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				String date1 = sdf.format(this.view.getBuscar1().getDate());
 				String date2 = sdf.format(this.view.getBuscar2().getDate());

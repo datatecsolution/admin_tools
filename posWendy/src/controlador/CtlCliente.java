@@ -2,6 +2,8 @@ package controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -10,19 +12,33 @@ import javax.swing.JOptionPane;
 import modelo.Articulo;
 import modelo.Cliente;
 import modelo.dao.ClienteDao;
+import modelo.dao.EmpleadoDao;
 import modelo.Conexion;
+import modelo.Empleado;
 import view.ViewCrearCliente;
+import view.ViewListaEmpleados;
 
-public class CtlCliente implements ActionListener,WindowListener {
+public class CtlCliente implements ActionListener,WindowListener , KeyListener{
 	
 	private ViewCrearCliente view;
 	private Cliente myCliente=null;
 	private ClienteDao myClienteDao=null;
 	private boolean resultaOperacion=false;
+	private Empleado myVendedor=null;
+	private EmpleadoDao myEmpleadoDao;
 	
 	public CtlCliente(ViewCrearCliente v){
 		view=v;
 		view.conectarControlador(this);
+		
+		
+		myEmpleadoDao=new EmpleadoDao();
+		
+		//se busca el empleado por defecto es con el id 0
+		myVendedor=myEmpleadoDao.buscarPorId(1);
+		if(myVendedor!=null){
+			view.getTxtVendedor().setText(myVendedor.toString());
+		}
 		myCliente=new Cliente();
 		myClienteDao=new ClienteDao();
 		view.setLocationRelativeTo(view);
@@ -36,6 +52,7 @@ public class CtlCliente implements ActionListener,WindowListener {
 		myCliente.setTelefono(view.getTxtTelefono().getText());
 		myCliente.setCelular(view.getTxtMovil().getText());
 		myCliente.setRtn(view.getTxtRtn().getText());
+		myCliente.setVendedor(myVendedor);
 	}
 	
 	public boolean agregarCliente(){
@@ -100,7 +117,7 @@ public class CtlCliente implements ActionListener,WindowListener {
 		this.view.getTxtMovil().setText(cliente.getCelular());
 		this.view.getTxtRtn().setText(cliente.getRtn());
 		
-		
+		view.getTxtVendedor().setText(cliente.getVendedor().toString());
 		
 		
 		
@@ -149,6 +166,41 @@ public class CtlCliente implements ActionListener,WindowListener {
 	@Override
 	public void windowDeactivated(WindowEvent e) {
 		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+		switch(e.getKeyCode()){
+		
+		case KeyEvent.VK_F1:
+			buscarEmpleado();
+			break;
+	}
+		
+	}
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void buscarEmpleado(){
+		ViewListaEmpleados viewBuscarEmpleado=new ViewListaEmpleados(view);
+		CtlEmpleadosListaBuscar ctBuscarEmpleado=new CtlEmpleadosListaBuscar(viewBuscarEmpleado);
+		viewBuscarEmpleado.pack();
+		boolean resultado=ctBuscarEmpleado.buscar();
+		
+		if(resultado){
+			myVendedor=ctBuscarEmpleado.getEmpleadoSelected();
+			view.getTxtVendedor().setText(myVendedor.toString());
+		}
 		
 	}
 

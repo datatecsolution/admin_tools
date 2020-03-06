@@ -14,6 +14,7 @@ import modelo.CodBarra;
 
 
 import modelo.DetalleFacturaProveedor;
+import modelo.PrecioArticulo;
 
 
 public class DmtFacturaProveedores extends AbstractTableModel {
@@ -145,9 +146,17 @@ public class DmtFacturaProveedores extends AbstractTableModel {
 		        		}else
 		        			return null;
 		        case 8:
-		        	if(detallesFactura.get(rowIndex).getArticulo().getPreciosVenta()!=null){
+		        	PrecioArticulo precioCosto=null;
+		        	
+		        	for(int aa=0;aa<detallesFactura.get(rowIndex).getArticulo().getPreciosVenta().size();aa++){
+		        		if(detallesFactura.get(rowIndex).getArticulo().getPreciosVenta().get(aa).getCodigoPrecio()==4){
+		        			precioCosto=detallesFactura.get(rowIndex).getArticulo().getPreciosVenta().get(aa);
+		        		}
+		        	}
+		        	if(detallesFactura.get(rowIndex).getArticulo().getPreciosVenta()!=null && precioCosto!=null){
 	        			
-	        			return detallesFactura.get(rowIndex).getArticulo().getPreciosVenta().get(3).getPrecio();
+	        			
+	        			return precioCosto.getPrecio();
 	        			
 	        		}else
 	        			return null;
@@ -240,13 +249,25 @@ public class DmtFacturaProveedores extends AbstractTableModel {
 					fireTableCellUpdated(rowIndex, columnIndex);
 				break;
 			case 8:
-				if(detallesFactura.get(rowIndex).getArticulo().getPreciosVenta()!=null){
+				PrecioArticulo precioCosto=null;
+	        	
+	        	for(int aa=0;aa<detallesFactura.get(rowIndex).getArticulo().getPreciosVenta().size();aa++){
+	        		if(detallesFactura.get(rowIndex).getArticulo().getPreciosVenta().get(aa).getCodigoPrecio()==4){
+	        			precioCosto=detallesFactura.get(rowIndex).getArticulo().getPreciosVenta().get(aa);
+	        		}
+	        	}
+				if(detallesFactura.get(rowIndex).getArticulo().getPreciosVenta()!=null && detallesFactura.get(rowIndex).getArticulo().getPreciosVenta().size()>=3){
         			
-        			detallesFactura.get(rowIndex).getArticulo().getPreciosVenta().get(3).setPrecio(new BigDecimal(v));;
+					precioCosto.setPrecio(new BigDecimal(v));;
         			fireTableCellUpdated(rowIndex, columnIndex);
         			
         		}else{
-        			JOptionPane.showMessageDialog(null,"El articulo no tiene precio de costo.","Error en articulo",JOptionPane.ERROR_MESSAGE); 
+        			PrecioArticulo precioCosto2=new PrecioArticulo();
+        			precioCosto2.setCodigoArticulo(detallesFactura.get(rowIndex).getArticulo().getId());
+        			precioCosto2.setCodigoPrecio(4);
+        			precioCosto2.setPrecio(new BigDecimal(v));
+        			detallesFactura.get(rowIndex).getArticulo().getPreciosVenta().add(precioCosto2);
+        			//JOptionPane.showMessageDialog(null,"El articulo no tiene precio de costo.","Error en articulo",JOptionPane.ERROR_MESSAGE); 
         		}
 	        	
 				break;

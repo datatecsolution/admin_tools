@@ -12,6 +12,7 @@ public class DetalleFacturaProveedor {
 	private BigDecimal subTotal=new BigDecimal(0.0);
 	private BigDecimal precioCompra=new BigDecimal(0.0);
 	private BigDecimal total=new BigDecimal(0.0);
+	private int codigoBodega=-1;
 	
 	private Departamento departamentoOrigen=new Departamento();
 	private Departamento departamentoDestino=new Departamento();
@@ -90,5 +91,11 @@ public class DetalleFacturaProveedor {
 	 */
 	public void setIvaIncludo(boolean ivaIncludo) {
 		this.ivaIncludo = ivaIncludo;
+	}
+	public int getCodigoBodega() {
+		return codigoBodega;
+	}
+	public void setCodigoBodega(int codigoBodega) {
+		this.codigoBodega = codigoBodega;
 	}
 }

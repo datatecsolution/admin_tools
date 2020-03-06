@@ -38,6 +38,7 @@ public class FacturaOrdenVentaDao extends ModeloDaoBasic {
 							+ " encabezado_factura_temp.total AS total, "
 							+ " cliente.codigo_cliente AS codigo_cliente, "
 							+ " cliente.nombre_cliente AS nombre_cliente, "
+							+ " cliente.tipo_cliente AS tipo_cliente, "
 							+ " encabezado_factura_temp.codigo AS codigo, "
 							+ " encabezado_factura_temp.estado_factura AS estado_factura, "
 							+ " encabezado_factura_temp.isvOtros AS isvOtros, "
@@ -89,9 +90,9 @@ public class FacturaOrdenVentaDao extends ModeloDaoBasic {
 		{
 			String nombreCliente=myFactura.getCliente().getNombre();//"Consumidor final";
 			
-			//si el cliente en escrito por el bombero
+			//si el cliente en escrito por el usuario
 			if(myFactura.getCliente().getId()<0){
-				myClienteDao.registrar(myFactura.getCliente());
+				myClienteDao.registrarClienteContado(myFactura.getCliente());
 				myFactura.getCliente().setId(myClienteDao.getIdClienteRegistrado());
 				//JOptionPane.showMessageDialog(null,myClienteDao.getIdClienteRegistrado());
 			}
@@ -189,6 +190,7 @@ public class FacturaOrdenVentaDao extends ModeloDaoBasic {
 				Cliente unCliente=new Cliente();//myClienteDao.buscarCliente(res.getInt("codigo_cliente"));
 				unCliente.setId(res.getInt("codigo_cliente"));
 				unCliente.setNombre(res.getString("nombre_cliente"));
+				unCliente.setTipoCliente(res.getInt("tipo_cliente"));
 				unCliente.setRtn(res.getString("rtn"));
 				
 				unaFactura.setCliente(unCliente);

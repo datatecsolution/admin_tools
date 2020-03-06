@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.sql.DataSource;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -20,6 +21,7 @@ import modelo.dao.FacturaDao;
 import modelo.Conexion;
 import modelo.ConexionStatic;
 import view.ViewAgregarCompras;
+import view.ViewConfigUser;
 import view.ViewCrearCaja;
 import view.ViewCrearDatosFacturacion;
 import view.ViewCuentaBanco;
@@ -47,6 +49,7 @@ import view.ViewListaPagosProveedores;
 import view.ViewListaPrecioProgramar;
 import view.ViewListaProveedor;
 import view.ViewListaRequisiciones;
+import view.ViewListaRutasEntregas;
 import view.ViewListaSalidas;
 import view.ViewListaUsuarios;
 import view.ViewMenuPrincipal;
@@ -98,6 +101,15 @@ public class CtlMenuPrincipal implements ActionListener,WindowListener, Runnable
 		JDialog.setDefaultLookAndFeelDecorated(true);
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		switch(comando){
+		
+		case "RUTAS_ENTREGAS":
+			
+			ViewListaRutasEntregas viewListaRutasEntregas=new ViewListaRutasEntregas(view);
+			CtlRutasEntregas ctlRutasEntregas=new CtlRutasEntregas(viewListaRutasEntregas);
+			viewListaRutasEntregas.dispose();
+			viewListaRutasEntregas=null;
+			ctlRutasEntregas=null;
+			break;
 		  
 		case "FACT_VENCIDAS":
 			ViewCuentasFacturas viewCuentasFacturas=new ViewCuentasFacturas(view);
@@ -114,11 +126,19 @@ public class CtlMenuPrincipal implements ActionListener,WindowListener, Runnable
 			break;
 		
 		case "CONFIG_USUARIOS":
+			ViewConfigUser viewConfigUser=new ViewConfigUser(view);
+			CtlConfigUser ctlConfigUser=new CtlConfigUser(viewConfigUser);
+			
+			viewConfigUser.dispose();
+			viewConfigUser=null;
+			ctlConfigUser=null;
+			/*
 			ViewListaConfigsUsuarios viewListaConfigsUsuarios=new ViewListaConfigsUsuarios(view);
+			 ((JComponent) viewListaConfigsUsuarios.getTabla().getDefaultRenderer(Boolean.class)).setOpaque(true);
 			CtlConfigUsuariosLista ctlConfigUsuariosLista=new CtlConfigUsuariosLista(viewListaConfigsUsuarios);
 			viewListaConfigsUsuarios.dispose();
 			viewListaConfigsUsuarios=null;
-			ctlConfigUsuariosLista=null;
+			ctlConfigUsuariosLista=null;*/
 		
 		break;
 		

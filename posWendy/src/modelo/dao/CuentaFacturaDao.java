@@ -220,10 +220,10 @@ public class CuentaFacturaDao extends ModeloDaoBasic {
 			
 			
 			conn=ConexionStatic.getPoolConexion().getConnection();
-			super.psConsultas = conn.prepareStatement(super.getQuerySelect()+" where cuentas_facturas.codigo_cliente=? and cuenta2.saldo<>0 order by cuentas_facturas.codigo_cuenta asc");
+			super.psConsultas = conn.prepareStatement(super.getQuerySelect()+" where cuentas_facturas.codigo_cliente=? and cuenta2.saldo2<>0 order by cuentas_facturas.codigo_cuenta asc");
 			super.psConsultas.setInt(1, codigoCliente);
 			
-			System.out.println(psConsultas);
+			//System.out.println(psConsultas);
 			res = super.psConsultas.executeQuery();
 			
 			while(res.next()){
@@ -292,7 +292,7 @@ public class CuentaFacturaDao extends ModeloDaoBasic {
 			
 			
 			conn=ConexionStatic.getPoolConexion().getConnection();
-			super.psConsultas = conn.prepareStatement(super.getQuerySelect()+" where cuentas_facturas.codigo_cliente=? and cuenta2.saldo<>0 order by cuentas_facturas.codigo_cuenta asc");
+			super.psConsultas = conn.prepareStatement(super.getQuerySelect()+" where cuentas_facturas.codigo_cliente=? and cuenta2.saldo2<>0 order by cuentas_facturas.codigo_cuenta asc");
 			super.psConsultas.setInt(1, codigoCliente);
 			
 			System.out.println(psConsultas);

@@ -8,7 +8,7 @@ import javax.swing.table.AbstractTableModel;
 import modelo.Cliente;
 
 public class TablaModeloCliente extends TablaModelo {
-	private String []columnNames={"Id","Nombre","Telefono","RTN","Saldo"};
+	private String []columnNames={"Id","Nombre","Direccion","Telefono","RTN","Saldo"};
 	private List<Cliente> clientes = new ArrayList<Cliente>();
 	
 	@Override
@@ -41,11 +41,13 @@ public class TablaModeloCliente extends TablaModelo {
         case 1:
             return clientes.get(rowIndex).getNombre();
         case 2:
-        	return clientes.get(rowIndex).getTelefono();//articulos.get(rowIndex).getMarca();
+        	return  clientes.get(rowIndex).getDereccion();
         case 3:
+        	return clientes.get(rowIndex).getTelefono();//articulos.get(rowIndex).getMarca();
+        case 4:
             
             return clientes.get(rowIndex).getRtn();
-        case 4:
+        case 5:
             
             return clientes.get(rowIndex).getSaldoCuenta().doubleValue();
        

@@ -62,6 +62,19 @@ public class Articulo {
 				precioVenta=preciosVenta.get(posicionPrecio).getPrecio().setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
 		}
 	}
+	public void setPrecio(PrecioArticulo pr){
+		int index=-1;
+		
+		for(int c=0;c<preciosVenta.size();c++){
+			
+			if(preciosVenta.get(c).getCodigoPrecio()==pr.getCodigoPrecio()){
+				
+				index=c;
+			}
+		}
+		if(index!=-1)
+			precioVenta=preciosVenta.get(index).getPrecio().setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+	}
 	public void lastPrecio(){
 		posicionPrecio--;
 		if(posicionPrecio<=0){

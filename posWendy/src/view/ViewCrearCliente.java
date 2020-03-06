@@ -24,6 +24,7 @@ public class ViewCrearCliente extends JDialog{
 	private BotonCancelar btnCancelar;
 	private BotonActualizar btnActualizar;
 	private BotonGuardar btnGuardar;
+	private JTextField txtVendedor;
 	
 	public ViewCrearCliente() {
 		
@@ -32,11 +33,11 @@ public class ViewCrearCliente extends JDialog{
 		
 		setTitle("Crear Cliente");
 		
-		this.setSize(365,415);
+		this.setSize(350,464);
 		getContentPane().setLayout(null);
 		
 		JPanel JplPrincipal = new PanelPadre();
-		JplPrincipal.setBounds(0, 0, 349, 376);
+		JplPrincipal.setBounds(0, 0, 349, 428);
 		getContentPane().add(JplPrincipal);
 		JplPrincipal.setLayout(null);
 		
@@ -87,16 +88,25 @@ public class ViewCrearCliente extends JDialog{
 		
 		// botones de accion
 		btnCancelar = new BotonCancelar();
-		btnCancelar.setLocation(186, 283);
+		btnCancelar.setLocation(180, 345);
 		JplPrincipal.add(btnCancelar);
 		
 		btnGuardar = new BotonGuardar();
-		btnGuardar.setLocation(25, 283);
+		btnGuardar.setLocation(19, 345);
 		JplPrincipal.add(btnGuardar);
 		
 		btnActualizar=new BotonActualizar();
-		btnActualizar.setLocation(25, 283);
+		btnActualizar.setLocation(19, 345);
 		JplPrincipal.add(btnActualizar);
+		
+		JLabel lblVendedor = new JLabel("F1 Vendedor");
+		lblVendedor.setBounds(19, 275, 119, 14);
+		JplPrincipal.add(lblVendedor);
+		
+		txtVendedor = new JTextField();
+		txtVendedor.setColumns(10);
+		txtVendedor.setBounds(19, 290, 311, 32);
+		JplPrincipal.add(txtVendedor);
 		btnActualizar.setVisible(false);
 		
 		
@@ -132,11 +142,27 @@ public class ViewCrearCliente extends JDialog{
 		
 		btnActualizar.addActionListener(c);
 		btnActualizar.setActionCommand("ACTUALIZAR");
+		
+		btnGuardar.addKeyListener(c);
+		btnCancelar.addKeyListener(c);
+		txtNombre.addKeyListener(c);
+		txtDireccion.addKeyListener(c);
+		txtTelefono.addKeyListener(c);
+		txtMovil.addKeyListener(c);
+		txtMovil.addKeyListener(c);
+		txtVendedor.addKeyListener(c);
+
 	}
 	public void configActualizar() {
 		// TODO Auto-generated method stub
 		this.btnActualizar.setVisible(true);
 		this.btnGuardar.setVisible(false);
 		
+	}
+	/**
+	 * @return the txtVendedor
+	 */
+	public JTextField getTxtVendedor() {
+		return txtVendedor;
 	}
 }

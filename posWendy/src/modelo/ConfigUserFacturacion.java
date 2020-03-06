@@ -19,6 +19,13 @@ public class ConfigUserFacturacion {
 	private boolean activarBusquedaFacturacion=false;
 	private boolean agregarClienteCredito=false;
 	private String formatoFacturaCredito="tiket";
+	private Usuario usuario2=null;
+	private Empleado vendedorBusqueda;
+	
+	public ConfigUserFacturacion(){
+		vendedorBusqueda=new Empleado();
+		vendedorBusqueda.setCodigo(1);
+	}
 	/**
 	 * @return the id
 	 */
@@ -224,6 +231,24 @@ public class ConfigUserFacturacion {
 	}
 	public void setFormatoFacturaCredito(String formatoFacturaCredito) {
 		this.formatoFacturaCredito = formatoFacturaCredito;
+	}
+	public Usuario getUser() {
+		return usuario2;
+	}
+	public void setUser(Usuario usuario2) {
+		this.usuario2 = usuario2;
+	}
+	/**
+	 * @return the vendedorBusqueda
+	 */
+	public Empleado getVendedorBusqueda() {
+		return vendedorBusqueda;
+	}
+	/**
+	 * @param vendedorBusqueda the vendedorBusqueda to set
+	 */
+	public void setVendedorBusqueda(Empleado vendedorBusqueda) {
+		this.vendedorBusqueda = vendedorBusqueda;
 	}
 	
 

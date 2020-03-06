@@ -348,8 +348,6 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 		if(e.getKeyCode() == KeyEvent.VK_ENTER){
 			
 			if(filaPulsada>0){
-				//Se recoge el id de la fila marcada
-	            int identificador= (int)this.view.getModelo().getValueAt(filaPulsada, 0);
 	            
 	            //se consigue el proveedore de la fila seleccionada
 	            myArticulo=this.view.getModelo().getArticulo(filaPulsada);// .getCliente(filaPulsada);

@@ -326,7 +326,7 @@ public class FacturaDao extends ModeloDaoBasic {
 			psConsultas.setInt(2, 0);
 			psConsultas.setInt(3, 1);
 			
-			System.out.println(psConsultas);
+			//System.out.println(psConsultas);
 			
 			res = psConsultas.executeQuery();
 			while(res.next()){
@@ -1328,11 +1328,14 @@ public class FacturaDao extends ModeloDaoBasic {
         		+ "	encabezado_factura.codigo_vendedor, "
         		+ " max(encabezado_factura.fecha) AS fecha, "
         		+ " sum(encabezado_factura.total) AS total_ventas, "
+        		+ " sum("+super.DbName+".f_costo_factura(encabezado_factura.numero_factura)) AS total_costos, "
+        		+ " sum(if(encabezado_factura.tipo_factura=2,encabezado_factura.total,0))  total_credito,"
+        		+ " sum(if(encabezado_factura.tipo_factura=1,encabezado_factura.total,0))  total_contado,"
         		+ " COUNT(encabezado_factura.numero_factura) AS no_clientes "
         		+ " FROM "+super.DbName+".encabezado_factura "
         				+ " INNER JOIN "+super.DbNameBase+".empleados "
         						+ " ON encabezado_factura.codigo_vendedor = empleados.codigo_empleado "
-        						+ " where fecha BETWEEN ? and ? "
+        						+ " where DATE_FORMAT(fecha,'%y-%m-%d') BETWEEN CAST(? AS DATE) and CAST(? AS DATE) "
         						+ " and encabezado_factura.estado_factura = 'ACT'"
         						+ "GROUP BY encabezado_factura.codigo_vendedor";
         
@@ -1361,8 +1364,12 @@ public class FacturaDao extends ModeloDaoBasic {
 				if(itemEmpleado>=0){
 					comisiones.get(itemEmpleado).setClienteAtendidos(res.getInt("no_clientes"));
 					comisiones.get(itemEmpleado).setTotalVentas(res.getDouble("total_ventas"));
+					comisiones.get(itemEmpleado).setTotalCredito(res.getDouble("total_credito"));
+					comisiones.get(itemEmpleado).setTotalContado(res.getDouble("total_contado"));
+					comisiones.get(itemEmpleado).setTotalCosto(res.getDouble("total_costos"));
 					comisiones.get(itemEmpleado).setPorcentaje(comisionPorcentaje);
 					comisiones.get(itemEmpleado).calcularComision();
+					comisiones.get(itemEmpleado).setPedidasGanacias();
 					//JOptionPane.showMessageDialog(null, comisiones.get(itemEmpleado).toString());
 				}
 				

@@ -100,6 +100,8 @@ public abstract class AbstractJasperReports
 	private static InputStream ventasArticulo=null;
 	private static InputStream cierreVentasDetalleCateg=null;
 	private static InputStream cuentaFactura=null;
+	private static InputStream ruta=null;
+	private static InputStream articulosPrecios=null;
 
 	
 	
@@ -144,6 +146,8 @@ public abstract class AbstractJasperReports
 	private static JasperReport reportVentasArticulo;
 	private static JasperReport reportCierreVentasDetalleCateg;
 	private static JasperReport	reportCuentaFactura;
+	private static JasperReport reportRuta;
+	private static JasperReport reportArticulosPrecios;
 	
 	
 	private static final Pattern numberPattern=Pattern.compile("-?\\d+");
@@ -220,6 +224,9 @@ public abstract class AbstractJasperReports
 		
 		cuentaFactura=AbstractJasperReports.class.getResourceAsStream("/reportes/cliente_cuenta_factura.jasper");
 		
+		ruta=AbstractJasperReports.class.getResourceAsStream("/reportes/reporte_rutas.jasper");
+		articulosPrecios=AbstractJasperReports.class.getResourceAsStream("/reportes/ReporteArticuloPrecio.jasper");
+		
 		try {
 			reportFactura = (JasperReport) JRLoader.loadObject( factura );
 			reportFactura2 = (JasperReport) JRLoader.loadObject( factura2 );
@@ -272,6 +279,9 @@ public abstract class AbstractJasperReports
 			reportCierreVentasDetalleCateg=(JasperReport) JRLoader.loadObject( cierreVentasDetalleCateg );
 			
 			reportCuentaFactura=(JasperReport) JRLoader.loadObject(cuentaFactura  );
+			
+			reportRuta=(JasperReport) JRLoader.loadObject(ruta  );
+			reportArticulosPrecios=(JasperReport) JRLoader.loadObject(articulosPrecios  );
 			
 		} catch (JRException e) {
 			// TODO Auto-generated catch block
@@ -458,6 +468,46 @@ public static void createReportVentasArticulo(Connection conn,List<DetalleFactur
 						e1.printStackTrace();
 			}
 	}
+
+public static void createReportRuta(Connection conn,RutaEntrega ruta,List<DetalleFactura> ventas){
+	 
+	
+	Map<String, Object> parametros = new HashMap<String, Object>();
+	 parametros.put("fecha",ruta.getFecha());
+	 parametros.put("usuario", ConexionStatic.getUsuarioLogin().getUser());
+	 
+	 parametros.put("vendedor", ruta.getVendedor().getCodigo()+" | "+ruta.getVendedor().getNombre()+" "+ruta.getVendedor().getApellido());
+	 
+	 parametros.put("codigo_ruta", ruta.getIdRuta());
+	 parametros.put("bD_admin",facturaDao.getDbNameDefault());
+	 
+	 
+	 
+	
+	 
+	 
+	 
+	 JRBeanCollectionDataSource comisionesJRBean =new JRBeanCollectionDataSource(ventas);
+	 parametros.put("ventasDataSource",comisionesJRBean);
+	 
+	 
+	 try {
+		 if(reportRuta!=null)
+			 reportFilled = JasperFillManager.fillReport( reportRuta, parametros, conn );
+		 	//reportFilled = JasperFillManager.fillReport( reportComisiones, parametros, new JREmptyDataSource() );
+		 else
+			 JOptionPane.showMessageDialog(null, "No se encontro el reportes");
+	} catch (JRException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	 try {
+			conn.close();
+		} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+		}
+}
 		
 public static void createReportVentasDetalleTurno(Connection conn,CierreCaja cierre,List<DetalleFactura> ventas,Caja myCaja){
 		 
@@ -747,6 +797,25 @@ public static void createReportVentasCategoria(Connection conn,CierreCaja cierre
 						e1.printStackTrace();
 			}
 	}
+	public static void createReportArticulosPreios(Connection conn,String user, Integer codigoCategoria){
+		 Map parametros = new HashMap();
+		 parametros.put("usuario",user);
+		 parametros.put("codigo_categoria",codigoCategoria);
+		 
+		 
+		 try {
+			reportFilled = JasperFillManager.fillReport( reportArticulosPrecios, parametros, conn );
+		} catch (JRException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 try {
+				conn.close();
+			} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+			}
+	}
 	
 	public static void createReportInventarioBodega(Connection conn,String user,Integer idBodega){
 		 Map parametros = new HashMap();
@@ -1021,11 +1090,13 @@ public static void createReportVentasCategoria(Connection conn,CierreCaja cierre
 				}
 	}
 	
-	public static void createReportFacturaCarta( Connection conn,Integer idFactura )
+	public static void createReportFacturaCarta( Connection conn,Integer idFactura, String  obrs )
 	{
 		
 		 Map parametros = new HashMap();
 		 parametros.put("numero_factura",idFactura);
+		 parametros.put("observacion",obrs);
+		 
 		 if(ConexionStatic.getUsuarioLogin().getCajaActiva()!=null){
 			 parametros.put("bD_facturacion",ConexionStatic.getUsuarioLogin().getCajaActiva().getNombreBd());
 			// JOptionPane.showMessageDialog(null,ConexionStatic.getUsuarioLogin().getCajaActiva().getNombreBd());
@@ -1048,11 +1119,12 @@ public static void createReportVentasCategoria(Connection conn,CierreCaja cierre
 				}
 		
 	}
-	public static void createReportFacturaCartaCredito( Connection conn,Integer idFactura )
+	public static void createReportFacturaCartaCredito( Connection conn,Integer idFactura , String obrs )
 	{
 		
 		 Map parametros = new HashMap();
 		 parametros.put("numero_factura",idFactura);
+		 parametros.put("observacion",obrs);
 		 if(ConexionStatic.getUsuarioLogin().getCajaActiva()!=null){
 			 parametros.put("bD_facturacion",ConexionStatic.getUsuarioLogin().getCajaActiva().getNombreBd());
 			// JOptionPane.showMessageDialog(null,ConexionStatic.getUsuarioLogin().getCajaActiva().getNombreBd());

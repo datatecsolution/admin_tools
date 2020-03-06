@@ -10,7 +10,11 @@ public class Comision {
 	private String fecha1="";
 	private String fecha2="";
 	private double comision=0.0;
+	private double totalCosto=0.0;
+	private double totalCredito=0.0;
+	private double totalContado=0.0;
 	private double totalVentas=0.0;
+	private double pedidasGanacias=0.0;
 	private double porcentaje=0.0;
 	/**
 	 * @return the codigo
@@ -144,6 +148,54 @@ public class Comision {
 				+ codigoVendedor + ", clienteAtendidos=" + clienteAtendidos + ", fecha1=" + fecha1 + ", fecha2="
 				+ fecha2 + ", comision=" + comision + ", totalVentas=" + totalVentas + ", porcentaje=" + porcentaje
 				+ "]";
+	}
+	/**
+	 * @return the totalCosto
+	 */
+	public double getTotalCosto() {
+		return totalCosto;
+	}
+	/**
+	 * @param totalCosto the totalCosto to set
+	 */
+	public void setTotalCosto(double t) {
+		this.totalCosto = totalCosto+t;
+	}
+	/**
+	 * @return the totalCredito
+	 */
+	public double getTotalCredito() {
+		return totalCredito;
+	}
+	/**
+	 * @param totalCredito the totalCredito to set
+	 */
+	public void setTotalCredito(double t) {
+		this.totalCredito = totalCredito+t;
+	}
+	/**
+	 * @return the totalContado
+	 */
+	public double getTotalContado() {
+		return totalContado;
+	}
+	/**
+	 * @param totalContado the totalContado to set
+	 */
+	public void setTotalContado(double t) {
+		this.totalContado = totalContado+t;
+	}
+	/**
+	 * @return the pedidasGanacias
+	 */
+	public double getPedidasGanacias() {
+		return pedidasGanacias;
+	}
+	/**
+	 * @param pedidasGanacias the pedidasGanacias to set
+	 */
+	public void setPedidasGanacias() {
+		this.pedidasGanacias = this.totalVentas-this.totalCosto;
 	}
 	
 

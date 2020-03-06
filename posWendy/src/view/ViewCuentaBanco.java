@@ -45,7 +45,7 @@ public class ViewCuentaBanco extends ViewTabla {
 
 	private TmCuentasBanco modelo;
 	private BotonCuenta btnReporte;
-	private JComboBox<Banco> cbxBancos;
+    private JComboBox<Banco> cbxBancos;
 	private CbxTmCuentasBancos modeloCuentasBancos;
 
 

@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 
+import modelo.Caja;
 import modelo.Empleado;
 import modelo.Impuesto;
 
@@ -11,6 +12,14 @@ import modelo.Impuesto;
 public class CbxTmEmpleado extends DefaultComboBoxModel{
 	
 	private Vector<Empleado> empleados=new Vector<Empleado>();
+	
+	public void agregar(Empleado c){
+		empleados.addElement(c);
+	}
+	
+	public Empleado getEmpleado(int position){
+		return empleados.get(position);
+	}
 
 	@Override
 	public int getSize() {

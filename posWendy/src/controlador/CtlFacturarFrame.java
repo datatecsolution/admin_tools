@@ -3,6 +3,7 @@ package controlador;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -19,6 +20,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -61,6 +63,7 @@ import modelo.DetalleFactura;
 import modelo.Empleado;
 import modelo.Factura;
 import modelo.Insumo;
+import modelo.PrecioArticulo;
 import modelo.ReciboPago;
 import modelo.SalidaCaja;
 import modelo.VentasCategoria;
@@ -81,7 +84,9 @@ import view.ViewListaCotizacion;
 import view.ViewModuloFacturar;
 import view.ViewPagoProveedor;
 import view.ViewSalidaCaja;
+import view.ViewSelectPrecio;
 import view.botones.BotonesApp;
+import view.tablemodel.CbxTmPrecios;
 
 public class CtlFacturarFrame  implements ActionListener, MouseListener, TableModelListener, WindowListener, KeyListener  {
 	
@@ -338,7 +343,7 @@ public class CtlFacturarFrame  implements ActionListener, MouseListener, TableMo
 									}//sin del else para comprobar las existencia de los servicios 
 									
 							}
-							
+							view.getTxtBuscar().setText("");
 						}else{
 							JOptionPane.showMessageDialog(view, "No se encontro el articulo");
 							view.getTxtBuscar().setText("");
@@ -515,7 +520,6 @@ public class CtlFacturarFrame  implements ActionListener, MouseListener, TableMo
 		
 		
 		myFactura.setDetalles(detallesOrdenDao.detallesFacturaPendiente(numeroFactura));
-		
 		
 		cargarFacturaView();
 		this.calcularTotales();
@@ -875,53 +879,9 @@ public void calcularTotales(){
 						ViewEntradaCaja vEntradaCaja=new ViewEntradaCaja(null);
 						CtlEntradaCaja cEntradaCaja=new CtlEntradaCaja(vEntradaCaja);
 						
-						/*
-						
-						boolean resl = setCierre();
-						//se procesa el resultado del cierre de caja
-						if (resl) {
-							
-							JPasswordField pfs = new JPasswordField();
-							int action2 = JOptionPane.showConfirmDialog(view, pfs,"Escriba el password de admin",JOptionPane.OK_CANCEL_OPTION);
-							//String pwd=JOptionPane.showInputDialog(view, "Escriba la contrase�a admin", "Seguridad", JOptionPane.INFORMATION_MESSAGE);
-							if(action2 < 0){
-								
-							}else{
-								String pwd=new String(pfs.getPassword());
-								//comprabacion del permiso administrativo
-								if(myUsuarioDao.comprobarAdmin(pwd)){
-							
-										int resul=JOptionPane.showConfirmDialog(view, "Desea agregar efectivo al caja?");
-										if(resul==0){
-											
-											String entrada=JOptionPane.showInputDialog("Escriba la cantidad que desea agregar a la caja");
-											
-											if(modelo.AbstractJasperReports.isNumberReal(entrada)){
-												
-													
-													CierreCajaDao cierre=new CierreCajaDao();
-													boolean resulAdd=cierre.addEfectivo(new BigDecimal(entrada));
-													
-													if(resulAdd){
-														JOptionPane.showMessageDialog(view, "Se agrega la cantidad de "+entrada+"a la caja.","Transaccion completada!!!",JOptionPane.INFORMATION_MESSAGE);
-													}
-												
-												
-											}
-											
-										}
-								}
-							}
-						}else {
-							JOptionPane.showMessageDialog(view,
-									"No se puede cobrar la factura. Debe abrir la caja primero!!!", "Error caja",
-									JOptionPane.ERROR_MESSAGE);
-						}
-					
-						
-						*/
-						
-						
+						vEntradaCaja.dispose();
+						vEntradaCaja=null;
+						cEntradaCaja=null;
 							
 						break;
 						
@@ -951,7 +911,7 @@ public void calcularTotales(){
 						panelDescuento.add(rememberChk);
 						
 						descuento.requestFocusInWindow();
-						
+						//sdfsdf
 					
 						
 						
@@ -1215,24 +1175,36 @@ public void calcularTotales(){
 					case KeyEvent.VK_F8:
 						
 						
-						JPasswordField pf = new JPasswordField();
-						int action = JOptionPane.showConfirmDialog(view, pf,"Escriba el password de admin",JOptionPane.OK_CANCEL_OPTION);
-						//String pwd=JOptionPane.showInputDialog(view, "Escriba la contrase�a admin", "Seguridad", JOptionPane.INFORMATION_MESSAGE);
-						if(action < 0){
-							
-						}else{
-							String pwd=new String(pf.getPassword());
-							//comprabacion del permiso administrativo
-							if(myUsuarioDao.comprobarAdmin(pwd)){
+						if(ConexionStatic.getUsuarioLogin().getConfig().isPwdPrecio()){
 						
-								if(filaPulsada>=0){
-									String entrada=JOptionPane.showInputDialog("Escriba el precio");
+							JPasswordField pf = new JPasswordField();
+							int action = JOptionPane.showConfirmDialog(view, pf,"Escriba el password de admin",JOptionPane.OK_CANCEL_OPTION);
+							//String pwd=JOptionPane.showInputDialog(view, "Escriba la contrase�a admin", "Seguridad", JOptionPane.INFORMATION_MESSAGE);
+							if(action < 0){
+								
+							}else{
+								String pwd=new String(pf.getPassword());
+								//comprabacion del permiso administrativo
+								if(myUsuarioDao.comprobarAdmin(pwd)){
 							
-									if(modelo.AbstractJasperReports.isNumberReal(entrada)){
-												this.view.getModeloTabla().getDetalle(filaPulsada).getArticulo().setPrecioVenta(new Double(entrada));
-												this.calcularTotales();
-										}
+									if(filaPulsada>=0){
+										String entrada=JOptionPane.showInputDialog("Escriba el precio");
+								
+										if(modelo.AbstractJasperReports.isNumberReal(entrada)){
+													this.view.getModeloTabla().getDetalle(filaPulsada).getArticulo().setPrecioVenta(new Double(entrada));
+													this.calcularTotales();
+											}
+									}
 								}
+							}
+						}else{
+							if(filaPulsada>=0){
+								String entrada=JOptionPane.showInputDialog("Escriba el precio");
+						
+								if(modelo.AbstractJasperReports.isNumberReal(entrada)){
+											this.view.getModeloTabla().getDetalle(filaPulsada).getArticulo().setPrecioVenta(new Double(entrada));
+											this.calcularTotales();
+									}
 							}
 						}
 						
@@ -1640,6 +1612,8 @@ public void calcularTotales(){
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 		
+		filaPulsada = this.view.getTableDetalle().getSelectedRow();
+		
 		
 		if(e.getComponent()==this.view.getTxtNombrecliente()){
 			view.getTxtIdcliente().setText("-1");
@@ -1657,6 +1631,57 @@ public void calcularTotales(){
 					guardar();
 				
 			}
+		
+		//para aplicar un precio en especifico
+		if(e.isControlDown() && e.getKeyCode() == KeyEvent.VK_UP){
+			
+			
+			JPasswordField pfs = new JPasswordField();
+			int action2 = JOptionPane.showConfirmDialog(view, pfs,"Escriba el password de admin",JOptionPane.OK_CANCEL_OPTION);
+			//String pwd=JOptionPane.showInputDialog(view, "Escriba la contrase�a admin", "Seguridad", JOptionPane.INFORMATION_MESSAGE);
+			if(action2 < 0){
+				
+			}else{
+				String pwd=new String(pfs.getPassword());
+				
+				//comprabacion del permiso administrativo
+				if(myUsuarioDao.comprobarAdmin(pwd)){
+					
+					ViewSelectPrecio viewSelectPrecio=new ViewSelectPrecio(null);
+					CtlSelectPrecio ctlSelectPrecio=new CtlSelectPrecio(viewSelectPrecio);
+					
+					boolean resultado=ctlSelectPrecio.agregar();
+					if(resultado){
+						//JOptionPane.showMessageDialog(view,ctlSelectPrecio.isAplicarTodo()+" | " +ctlSelectPrecio.getPrecioSelect());
+						
+						//si se aplicara el precio a toda la factura
+						if(ctlSelectPrecio.isAplicarTodo()){
+							
+							//se recorren los item de la factura aplicando el descuento
+			    			for(int xx=0;xx<view.getModeloTabla().getDetalles().size();xx++){
+			    				DetalleFactura detalle=this.view.getModeloTabla().getDetalle(xx);
+			    				
+			    				//dfsdf
+			    				if(detalle.getArticulo().getId()!=-1)
+			    					detalle.getArticulo().setPrecio(ctlSelectPrecio.getPrecioSelect());
+			    					
+			    			}
+							
+						}else{
+							//fdsf
+							if(filaPulsada>=0){
+								this.view.getModeloTabla().getDetalle(filaPulsada).getArticulo().setPrecio(ctlSelectPrecio.getPrecioSelect());
+								
+							}
+						}
+						
+						this.calcularTotales();
+						
+						////
+					}
+				}
+			}
+		}
 		//para dejar la view para una nueva factura
 		if(e.isControlDown() && e.getKeyCode() == KeyEvent.VK_N){
 			setEmptyView();
@@ -2114,7 +2139,9 @@ public void calcularTotales(){
 						
 						
 						//JOptionPane.showMessageDialog(view, myCliente.toString());
-						if(myCliente!=null){
+						//fsdf
+						
+						if(myCliente!=null &&  myCliente.getTipoCliente()==2){
 							
 							
 							setFactura();
@@ -2373,6 +2400,7 @@ public void calcularTotales(){
 		
 		this.myCliente=null;
 		this.myArticulo=null;
+		//myFactura.getCliente()=null;
 		
 		//this.view.getTxtArticulo().setText("");
 		this.view.getTxtBuscar().setText("");
@@ -2394,6 +2422,10 @@ public void calcularTotales(){
 		ViewListaClientes viewListaCliente=new ViewListaClientes (null);
 		
 		CtlClienteBuscar ctlBuscarCliente=new CtlClienteBuscar(viewListaCliente);
+		viewListaCliente.pack();
+		ctlBuscarCliente.view.getTxtBuscar().setText("");
+		ctlBuscarCliente.view.getTxtBuscar().selectAll();
+		view.getTxtBuscar().requestFocusInWindow();
 		
 		boolean resul=ctlBuscarCliente.buscarCliente(null);
 		//se comprueba si le regreso un articulo valido
@@ -2967,8 +2999,11 @@ public void guardarRemotoCredito(){
 						}
 						
 						if(ConexionStatic.getUsuarioLogin().getConfig().getFormatoFactura().equals("carta")){
-								AbstractJasperReports.createReportFacturaCarta(ConexionStatic.getPoolConexion().getConnection(), myFactura.getIdFactura());
+								AbstractJasperReports.createReportFacturaCarta(ConexionStatic.getPoolConexion().getConnection(), myFactura.getIdFactura(),"ORIGINAL");
 								//AbstractJasperReports.showViewer(view);
+								AbstractJasperReports.imprimierFactura();
+								
+								AbstractJasperReports.createReportFacturaCarta(ConexionStatic.getPoolConexion().getConnection(), myFactura.getIdFactura(),"COPIA");
 								AbstractJasperReports.imprimierFactura();
 								
 						}
@@ -2979,21 +3014,24 @@ public void guardarRemotoCredito(){
 						if(ConexionStatic.getUsuarioLogin().getConfig().getFormatoFacturaCredito().equals("tiket")){
 						
 							AbstractJasperReports.createReportFacturaTiketCredito(ConexionStatic.getPoolConexion().getConnection(), myFactura.getIdFactura());
-							AbstractJasperReports.showViewer(view);
+							//AbstractJasperReports.showViewer(view);
 							//AbstractJasperReports.imprimierFactura();
-							//AbstractJasperReports.imprimierFactura();
+							AbstractJasperReports.imprimierFactura();
 						}
 						
 						if(ConexionStatic.getUsuarioLogin().getConfig().getFormatoFacturaCredito().equals("carta")){
-								AbstractJasperReports.createReportFacturaCartaCredito(ConexionStatic.getPoolConexion().getConnection(), myFactura.getIdFactura());
-								AbstractJasperReports.showViewer(view);
-								//AbstractJasperReports.imprimierFactura();
+								AbstractJasperReports.createReportFacturaCartaCredito(ConexionStatic.getPoolConexion().getConnection(), myFactura.getIdFactura(),"ORIGINAL");
+								//AbstractJasperReports.showViewer(view);
+								AbstractJasperReports.imprimierFactura();
+								
+								AbstractJasperReports.createReportFacturaCartaCredito(ConexionStatic.getPoolConexion().getConnection(), myFactura.getIdFactura(),"COPIA");
+								AbstractJasperReports.imprimierFactura();
 								
 						}
 					}
 					
-					/*
 					
+					/*
 					int resul2=JOptionPane.showConfirmDialog(view, "Desea imprimir la orden?");
 					if(resul2==0){
 						AbstractJasperReports.createReportOrden(ConexionStatic.getPoolConexion().getConnection(), myFactura.getIdFactura());

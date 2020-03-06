@@ -129,7 +129,7 @@ public class CtlFacturas implements ActionListener, MouseListener, ChangeListene
 						}
 						
 						if(ConexionStatic.getUsuarioLogin().getConfig().getFormatoFactura().equals("carta")){
-								AbstractJasperReports.createReportFacturaCarta(ConexionStatic.getPoolConexion().getConnection(), myFactura.getIdFactura());
+								AbstractJasperReports.createReportFacturaCarta(ConexionStatic.getPoolConexion().getConnection(), myFactura.getIdFactura(),"COPIA");
 								AbstractJasperReports.showViewer(view);
 								//AbstractJasperReports.imprimierFactura();
 								
@@ -147,7 +147,7 @@ public class CtlFacturas implements ActionListener, MouseListener, ChangeListene
 						}
 						
 						if(ConexionStatic.getUsuarioLogin().getConfig().getFormatoFacturaCredito().equals("carta")){
-								AbstractJasperReports.createReportFacturaCartaCredito(ConexionStatic.getPoolConexion().getConnection(), myFactura.getIdFactura());
+								AbstractJasperReports.createReportFacturaCartaCredito(ConexionStatic.getPoolConexion().getConnection(), myFactura.getIdFactura(),"COPIA");
 								AbstractJasperReports.showViewer(view);
 								//AbstractJasperReports.imprimierFactura();
 								

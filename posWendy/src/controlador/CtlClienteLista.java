@@ -15,8 +15,10 @@ import modelo.Articulo;
 import modelo.Cliente;
 import modelo.dao.ClienteDao;
 import modelo.dao.CodBarraDao;
+import modelo.dao.EmpleadoDao;
 import modelo.Conexion;
 import modelo.ConexionStatic;
+import modelo.Empleado;
 import view.tablemodel.TmCategorias;
 import view.ViewCrearArticulo;
 import view.ViewCrearCliente;
@@ -26,6 +28,7 @@ public class CtlClienteLista implements ActionListener, MouseListener {
 	private ViewListaClientes view;
 	private ClienteDao clienteDao=null;
 	private Cliente myCliente=null;
+	private EmpleadoDao empleadoDao=null;
 	
 	//fila selecciona enla lista
 		private int filaPulsada;
@@ -33,10 +36,29 @@ public class CtlClienteLista implements ActionListener, MouseListener {
 	public CtlClienteLista(ViewListaClientes v){
 		view=v;
 		view.conectarControlador(this);
+		empleadoDao=new EmpleadoDao ();
+		
+		cargarComboBox();
 		
 		clienteDao=new ClienteDao();
 		cargarTabla(clienteDao.todos(view.getModelo().getCanItemPag(),view.getModelo().getLimiteSuperior()));
 		view.setVisible(true);
+	}
+	
+	private void cargarComboBox(){
+		//se crea el objeto para obtener de la bd los impuestos
+		//myImpuestoDao=new ImpuestoDao(conexion);
+	
+		//se obtiene la lista de los impuesto y se le pasa al modelo de la lista
+		this.view.getModeloListaEmpleados().setLista(this.empleadoDao.todoEmpleadosVendedores());
+		
+		
+		//se remueve la lista por defecto
+		this.view.getCbxEmpleados().removeAllItems();
+	
+		//
+		int vendedor=view.getModeloListaEmpleados().buscarImpuesto(ConexionStatic.getUsuarioLogin().getConfig().getVendedorBusqueda());
+		this.view.getCbxEmpleados().setSelectedIndex(vendedor);
 	}
 
 	@Override
@@ -47,6 +69,20 @@ public class CtlClienteLista implements ActionListener, MouseListener {
 		case "ESCRIBIR":
 			view.setTamanioVentana(1);
 			break;
+			
+		case "CAMBIOCOMBOBOX":
+			//JOptionPane.showMessageDialog(view, "Cambio el vendedor");
+		
+			Empleado miEmpleado=(Empleado)view.getCbxEmpleados().getSelectedItem();
+			
+			if(miEmpleado!=null){
+				ConexionStatic.getUsuarioLogin().getConfig().setVendedorBusqueda(miEmpleado);
+			}
+			
+			
+			
+			
+		break;
 		case "BUSCAR":
 			//si se seleciono el boton ID
 			view.getModelo().setPaginacion();

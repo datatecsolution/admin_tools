@@ -136,11 +136,18 @@ public class FacturaCompraDao extends ModeloDaoBasic{
 					
 					this.preciosDao.actualizar(precioVenta);//se actualiza el precio
 					
+					PrecioArticulo precioCosto=null;
+					for(int aa=0;aa<fac.getDetalles().get(x).getArticulo().getPreciosVenta().size();aa++){
+		        		if(fac.getDetalles().get(x).getArticulo().getPreciosVenta().get(aa).getCodigoPrecio()==4){
+		        			precioCosto=fac.getDetalles().get(x).getArticulo().getPreciosVenta().get(aa);
+		        		}
+		        	}
+					
 					//se actualiza el precio costo en la base de datos
-					if(fac.getDetalles().get(x).getArticulo().getPreciosVenta()!=null){
+					if(fac.getDetalles().get(x).getArticulo().getPreciosVenta()!=null && precioCosto!=null){
 						//el en la tabla el codigo tres es la base de datos
-						PrecioArticulo preciocosto=fac.getDetalles().get(x).getArticulo().getPreciosVenta().get(3);
-						this.preciosDao.actualizar(preciocosto);//se actualiza el precio
+						//PrecioArticulo preciocosto=precioCosto
+						this.preciosDao.actualizar(precioCosto);//se actualiza el precio
 					}
 				}
 	

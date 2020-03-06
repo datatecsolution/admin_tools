@@ -30,10 +30,10 @@ public class CuentaXCobrarFacturaDao extends ModeloDaoBasic {
 		CuentaXCobrarFactura un=new CuentaXCobrarFactura();
 		
 		Connection con = null;
-        
+      
     	//String sql="select * from cierre where usuario = ?";
     	
-    	String sql2=super.getQuerySelect()+" WHERE cuentas_por_cobrar_facturas.codigo_cuenta = ? and tipo_movimiento=2 ORDER BY cuentas_por_cobrar_facturas.codigo_reguistro DESC LIMIT 1";
+    	String sql2=super.getQuerySelect()+" WHERE cuentas_por_cobrar_facturas.codigo_cuenta = ? and tipo_movimiento=2  ORDER BY cuentas_por_cobrar_facturas.codigo_reguistro DESC LIMIT 1";
     	ResultSet res=null;
 		
 		boolean existe=false;
@@ -227,7 +227,7 @@ public class CuentaXCobrarFacturaDao extends ModeloDaoBasic {
 					psConsultas.setBigDecimal(3, aRegistrar.getDebito());
 					psConsultas.setBigDecimal(4, aRegistrar.getSaldo());
 					psConsultas.setString(5, ConexionStatic.getUsuarioLogin().getUser());
-					psConsultas.setInt(6, 3);//tipo de movimiento 3= pago,1=saldo inicial(defaul), 3 interes
+					psConsultas.setInt(6, 2);//tipo de movimiento 2= pago,1=saldo inicial(defaul), 3 interes
 					resultado=psConsultas.executeUpdate();
 					return true;
 					

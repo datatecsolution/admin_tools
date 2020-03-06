@@ -27,6 +27,17 @@ public class ConfigUserFactDao extends ModeloDaoBasic {
 	public ConfigUserFactDao() {
 		super("config_user_facturacion", "id");
 		
+		sqlBaseJoin="SELECT *, "
+				+ " usuario.nombre_completo, "
+				+ " usuario.permiso, "
+				+ " usuario.tipo_permiso "
+		+ " FROM "
+				+super.DbName+ "."+super.tableName
+			+ " JOIN "+super.DbName+".usuario "
+			+ " on (usuario.usuario="+ super.tableName+".usuario) ";
+		
+		super.setSqlQuerySelectJoin(sqlBaseJoin);
+		
 	}
 
 	@Override
@@ -261,6 +272,88 @@ public class ConfigUserFactDao extends ModeloDaoBasic {
 			}
 			else return null;
 	}
+	
+	
+		public List<ConfigUserFacturacion> todos() {
+		// TODO Auto-generated method stub
+		List<ConfigUserFacturacion> configs=new ArrayList<ConfigUserFacturacion>();
+		
+		ResultSet res=null;
+		
+		Connection conn=null;
+		
+		boolean existe=false;
+		
+		try {
+			
+			
+			conn=ConexionStatic.getPoolConexion().getConnection();
+			super.psConsultas = conn.prepareStatement(super.getQuerySelect());
+			//super.psConsultas.setInt(1, limSupe);
+			//super.psConsultas.setInt(2, limInf);
+			//System.out.println(psConsultas);
+			res = super.psConsultas.executeQuery();
+			
+			while(res.next()){
+				ConfigUserFacturacion config=new ConfigUserFacturacion();
+				
+				config.setId(res.getInt("id"));
+				config.setUsuario(res.getString("usuario"));
+				
+				Usuario un=new Usuario();
+				un.setUser(res.getString("usuario"));
+				un.setNombre(res.getString("nombre_completo"));
+				un.setTipoPermiso(res.getInt("tipo_permiso"));
+				un.setPermiso(res.getString("permiso"));
+				config.setUser(un);
+				
+				config.setFormatoFactura(res.getString("formato_factura"));
+				config.setVentanaVendedor(res.getBoolean("ventana_vendedor"));
+				config.setPwdDescuento(res.getBoolean("pwd_descuento"));
+				config.setPwdPrecio(res.getBoolean("pwd_descuento"));
+				config.setDescPorcentaje(res.getBoolean("descuento_porcentaje"));
+				config.setVentanaObservaciones(res.getBoolean("ventana_observaciones"));
+				config.setPrecioRedondear(res.getBoolean("precio_redondiar"));
+				config.setFacturarSinInventario(res.getBoolean("facturar_sin_inventario"));
+				config.setImprReportCategCierre(res.getBoolean("impr_report_categ_cierre"));
+				config.setImprReportSalida(res.getBoolean("impr_report_salida"));
+				config.setShowReportSalida(res.getBoolean("show_report_salida"));
+				config.setImprReportEntrada(res.getBoolean("impr_report_entrada"));
+				config.setShowReportEntrada(res.getBoolean("show_report_entrada"));
+				config.setActivarBusquedaFacturacion(res.getBoolean("activar_busqueda_facturacion"));
+				
+				configs.add(config);
+				existe=true;
+			 }
+			//res.close();
+			//conexion.desconectar();
+					
+					
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(),"Error en la base de datos",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		finally
+		{
+			try{
+				if(res != null) res.close();
+	            if(super.psConsultas != null)super.psConsultas.close();
+	            if(conn != null) conn.close();
+				
+				} // fin de try
+				catch ( SQLException excepcionSql )
+				{
+					excepcionSql.printStackTrace();
+					//conexion.desconectar();
+				} // fin de catch
+		} // fin de finally
+		
+			if (existe) {
+				return configs;
+			}
+			else return null;
+	}
+
 
 	
 

@@ -366,6 +366,108 @@ public void getDetallesFactura(Caja caja,List<DetalleFactura> detalles,Articulo 
 	
 }
 
+public List<DetalleFactura> getDetallesFactura(Integer idFactura, Caja caja) {
+	
+	
+	//se cambia la base de datos para las facturas de la caja seleccionada
+	super.DbName=caja.getNombreBd();
+	setSqlQueryJoin();
+	
+	List<DetalleFactura> detalles=new ArrayList<DetalleFactura>();
+	
+
+    Connection con = null;
+
+	
+	ResultSet res=null;
+	
+	boolean existe=false;
+	try {
+		con = ConexionStatic.getPoolConexion().getConnection();
+		
+		psConsultas = con.prepareStatement(super.getQuerySelect()+" where detalle_factura.numero_factura=?;");
+		psConsultas.setInt(1, idFactura);
+		//System.out.println(psConsultas);
+		res = psConsultas.executeQuery();
+		while(res.next()){
+			DetalleFactura unDetalle=new DetalleFactura();
+			existe=true;
+			unDetalle.setId(res.getInt("id"));
+			unDetalle.setIdFactura(res.getInt("numero_factura_detalle"));
+			
+			
+			//se consigue el articulo del detalle
+			Articulo articuloDetalle= new Articulo();//articuloDao.buscarArticulo(res.getInt("codigo_articulo"));
+			articuloDetalle.setId(res.getInt("codigo_articulo"));
+			articuloDetalle.setArticulo(res.getString("articulo"));
+			articuloDetalle.setPrecioVenta(res.getDouble("precio_detalle"));//se estable el precio del articulo
+			unDetalle.setListArticulos(articuloDetalle);//se agrega el articulo al 
+			
+			unDetalle.setArt(res.getString("articulo"));
+			unDetalle.setCodigoArt(res.getInt("codigo_articulo"));
+			unDetalle.setPrecioVentaItem(res.getDouble("precio_detalle"));
+			
+			//se recoge el precio costo del articulo
+			BigDecimal precioCostoArticulo=new BigDecimal(res.getDouble("precio_costo"));
+			
+			//se mutimplica el cantidad del item por el precio costo
+			BigDecimal precioCosto=precioCostoArticulo.multiply(res.getBigDecimal("cantidad_detalle"));
+			
+			//se calcula la ganancia
+			BigDecimal ganacia=res.getBigDecimal("total_detalle").subtract(precioCosto);
+			
+			//se establece el total del costo
+			unDetalle.setTotalVentasCosto(precioCosto.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());
+			
+			//se establece la ganancia
+			unDetalle.setGanancia(ganacia.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue());
+			
+			//unDetalle.setTotalVentasCosto(totalVentasCosto);
+			unDetalle.setCantidad(res.getBigDecimal("cantidad_detalle"));
+			unDetalle.setImpuesto(res.getBigDecimal("impuesto_detalle"));
+			unDetalle.setSubTotal(res.getBigDecimal("subtotal_detalle"));
+			unDetalle.setDescuentoItem(res.getBigDecimal("descuento_detalle"));
+			unDetalle.setTotal(res.getBigDecimal("total_detalle"));
+			
+			
+			
+			
+			detalles.add(unDetalle);
+			
+			
+		 }
+				
+		} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(),"Error en la base de datos",JOptionPane.ERROR_MESSAGE);
+				System.out.println(e);
+		}
+	finally
+	{
+		
+		//se restablece el nombre de la base de datos por defecto
+		super.DbName=new String(super.DbNameBase);
+		try{
+			
+			if(res != null) res.close();
+            if(psConsultas != null)psConsultas.close();
+            if(con != null) con.close();
+            
+			
+			} // fin de try
+			catch ( SQLException excepcionSql )
+			{
+				excepcionSql.printStackTrace();
+				//conexion.desconectar();
+			} // fin de catch
+	} // fin de finally
+	
+	
+		if (existe) {
+			return detalles;
+		}
+		else return null;
+}
+
 	public List<DetalleFactura> getDetallesFactura(int idFactura) {
 		
 		
